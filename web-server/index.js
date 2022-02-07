@@ -1,12 +1,13 @@
 let express = require('express');
 let app = express();
 let path = require('path');
-const fs = require("fs");
-
+// const fs = require("fs");
+const cors = require("cors");
 // set the view engine to ejs`
-app.set('view engine', 'ejs');
+// app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname, '../web-client/build')));
 
+app.use(cors());
 // index page
 // app.get('/', function(req, res) {
 //   res.render('pages/home');
@@ -50,6 +51,14 @@ app.use(express.static(path.join(__dirname, '../web-client/build')));
 
 app.get("/api", (req, res) => {
   res.json({message: "Yo Yo Yo"});
+});
+
+app.get("/data", (req, res) => {
+  // fetch("https://www.premierleague.com/players/4999/Son-Heung-Min/stats")
+  // .then((response) => response.text())
+  // .then((data) => res.send(data));
+  res.json({message: "Yo Yo Yo"});
+
 });
 
 // All other GET requests not handled before will return our React app
