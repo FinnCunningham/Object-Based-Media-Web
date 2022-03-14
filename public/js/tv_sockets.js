@@ -8,7 +8,6 @@ $(function () {
     
     socket.on('play', function(msg){
         console.log("Start Clip");
-        // document.getElementById("videoClip").play();
     });
 
 
