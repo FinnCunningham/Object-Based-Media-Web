@@ -1,0 +1,25 @@
+{
+  "name": "object-based-media-project-web",
+  "version": "1.0.0",
+  "description": "Object-Based-Media-Project-Web Final year University disseration project of Object-Based Media In Sports website.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FinnCunningham/Object-Based-Media-Project-Web.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/FinnCunningham/Object-Based-Media-Project-Web/issues"
+  },
+  "homepage": "https://github.com/FinnCunningham/Object-Based-Media-Project-Web#readme",
+  "dependencies": {
+    "express": "^4.17.3",
+    "nodemon": "^2.0.15",
+    "socket.io": "^4.4.1"
+  }
+}
