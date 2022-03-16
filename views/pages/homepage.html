@@ -1,22 +1,37 @@
 <!DOCTYPE html>
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+        /* .video_player{
+            width: 90vw;
+            height: 90vh;
+        } */
+    </style>
 </head>
 
 <body>
+    <div id="room_div">
+        <input type="text" id="room_id"/>
+        <button onclick="createRoom();">Create room</button>
+    </div>
+    
+    <div id="tv-content"></div>
 
-<h1>Homepage</h1>
-<button onclick="play();">Yoo</button>
-<div id="tv-content"></div>
-
-<script src="/socket.io/socket.io.js"></script>
-<script src="js/tv_sockets.js"></script>
-<script>
-    var socket = io();
-
-    function play(){
-        socket.emit("start_video")
-    }
-</script>
+    <script src="/node/socket.io/socket.io.js"></script>
+    <script>
+        // var socket = io.connect('https://s5117817.bucomputing.uk', { path: '/node/socket.io/'});
+        var socket = io.connect(window.location.origin, {path: '/node/socket.io/'});
+        
+        const createRoom = () => {
+            roomValueEle = document.getElementById("room_id");
+            if(roomValueEle.value != ""){
+                socket.emit("join", roomValueEle.value)
+                document.getElementById("room_div").style.display = "None";
+                localStorage.setItem('room_id', roomValueEle.value)
+            }
+            
+        }
+    </script>
+    <script src="js/tv_sockets.js"></script>
 
 </body>
