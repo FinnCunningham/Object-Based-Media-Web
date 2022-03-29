@@ -1,0 +1,298 @@
+dbus-update-activation-environment: systemd --user not found, ignoring --systemd argument
+dbus-update-activation-environment: setting DISPLAY=:0
+dbus-update-activation-environment: setting XAUTHORITY=/home/s5117817/.Xauthority
+dbus-update-activation-environment: systemd --user not found, ignoring --systemd argument
+dbus-update-activation-environment: setting QT_ACCESSIBILITY=1
+dbus-update-activation-environment: systemd --user not found, ignoring --systemd argument
+dbus-update-activation-environment: setting SHELL=/bin/bash
+dbus-update-activation-environment: setting QT_ACCESSIBILITY=1
+dbus-update-activation-environment: setting XDG_CONFIG_DIRS=/etc/xdg/xdg-xubuntu:/etc/xdg
+dbus-update-activation-environment: setting XDG_SESSION_PATH=/org/freedesktop/DisplayManager/Session4
+dbus-update-activation-environment: setting CLUTTER_BACKEND=x11
+dbus-update-activation-environment: setting GNOME_KEYRING_CONTROL=/home/s5117817/.cache/keyring-BDOSJ1
+dbus-update-activation-environment: setting LANGUAGE=en_GB:en
+dbus-update-activation-environment: setting DESKTOP_SESSION=xubuntu
+dbus-update-activation-environment: setting PWD=/home/s5117817
+dbus-update-activation-environment: setting XDG_SESSION_DESKTOP=xubuntu
+dbus-update-activation-environment: setting LOGNAME=s5117817
+dbus-update-activation-environment: setting QT_QPA_PLATFORMTHEME=gtk2
+dbus-update-activation-environment: setting XDG_SESSION_TYPE=x11
+dbus-update-activation-environment: setting GPG_AGENT_INFO=/home/s5117817/.gnupg/S.gpg-agent:0:1
+dbus-update-activation-environment: setting XAUTHORITY=/home/s5117817/.Xauthority
+dbus-update-activation-environment: setting XDG_GREETER_DATA_DIR=/var/lib/lightdm-data/s5117817
+dbus-update-activation-environment: setting GDM_LANG=en_GB
+dbus-update-activation-environment: setting HOME=/home/s5117817
+dbus-update-activation-environment: setting IM_CONFIG_PHASE=1
+dbus-update-activation-environment: setting LANG=en_GB.UTF-8
+dbus-update-activation-environment: setting XDG_CURRENT_DESKTOP=XFCE
+dbus-update-activation-environment: setting XDG_SEAT_PATH=/org/freedesktop/DisplayManager/Seat0
+dbus-update-activation-environment: setting GTK_OVERLAY_SCROLLING=0
+dbus-update-activation-environment: setting USER=s5117817
+dbus-update-activation-environment: setting DISPLAY=:0
+dbus-update-activation-environment: setting SHLVL=1
+dbus-update-activation-environment: setting XDG_DATA_DIRS=/usr/share/xubuntu:/usr/share/xfce4:/usr/local/share:/usr/share:/var/lib/snapd/desktop
+dbus-update-activation-environment: setting PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+dbus-update-activation-environment: setting GDMSESSION=xubuntu
+dbus-update-activation-environment: setting DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-Fnkr9EmCEG,guid=9459e903f2a77203276c65a362405556
+dbus-update-activation-environment: setting _=/usr/bin/dbus-update-activation-environment
+
+(xfce4-session:139417): xfce4-session-WARNING **: 13:15:18.711: xfsm_manager_load_session: Something wrong with /home/s5117817/.cache/sessions/xfce4-session-dev36:0, Does it exist? Permissions issue?
+
+(wrapper-2.0:139584): GLib-GIO-CRITICAL **: 13:15:19.300: g_file_new_for_path: assertion 'path != NULL' failed
+
+(wrapper-2.0:139584): GLib-GIO-CRITICAL **: 13:15:19.300: g_file_monitor_file: assertion 'G_IS_FILE (file)' failed
+
+(wrapper-2.0:139584): GLib-GObject-WARNING **: 13:15:19.300: invalid (NULL) pointer instance
+
+(wrapper-2.0:139584): GLib-GObject-CRITICAL **: 13:15:19.300: g_signal_connect_data: assertion 'G_TYPE_CHECK_INSTANCE (instance)' failed
+
+(wrapper-2.0:139584): Gtk-WARNING **: 13:15:19.300: Attempting to add a widget with type GtkToggleButton to a container of type XfcePanelPlugin, but the widget is already inside a container of type XfcePanelPlugin, please remove the widget from its existing container first.
+Failed to start xfce4-indicator-plugin.target: Process org.freedesktop.systemd1 exited with status 1
+See user logs and 'systemctl --user status xfce4-indicator-plugin.target' for details.
+
+(wrapper-2.0:139580): Gtk-WARNING **: 13:15:19.339: Negative content width -3 (allocation 1, extents 2x2) while allocating gadget (node button, owner GtkToggleButton)
+
+(wrapper-2.0:139584): Gtk-WARNING **: 13:15:19.340: Negative content width -3 (allocation 1, extents 2x2) while allocating gadget (node button, owner GtkToggleButton)
+
+(wrapper-2.0:139590): Gtk-WARNING **: 13:15:19.345: Negative content width -3 (allocation 1, extents 2x2) while allocating gadget (node button, owner PulseaudioButton)
+
+(wrapper-2.0:139586): Gtk-WARNING **: 13:15:19.348: Negative content width -3 (allocation 1, extents 2x2) while allocating gadget (node button, owner PowerManagerButton)
+vmware-user: could not open /proc/fs/vmblock/dev
+Error: /usr/bin/vmtoolsd must be run inside a virtual machine on a VMware hypervisor product.
+Connection failure: Connection refused
+pa_context_connect() failed: Connection refused
+Traceback (most recent call last):
+  File "/usr/share/system-config-printer/applet.py", line 20, in <module>
+    import cups
+ModuleNotFoundError: No module named 'cups'
+
+** (xiccd:139634): CRITICAL **: 13:15:19.476: failed to create colord device: failed to obtain org.freedesktop.color-manager.create-device auth
+
+** (xiccd:139634): CRITICAL **: 13:15:19.672: failed to create colord device: failed to obtain org.freedesktop.color-manager.create-device auth
+
+(polkit-gnome-authentication-agent-1:139620): polkit-gnome-1-WARNING **: 13:15:19.723: Unable to determine the session we are in: No session for pid 139620
+Traceback (most recent call last):
+  File "/usr/bin/blueman-applet", line 15, in <module>
+    from blueman.Functions import create_logger, create_parser, set_proc_title
+  File "/usr/lib/python3/dist-packages/blueman/Functions.py", line 36, in <module>
+    from blueman.main.Config import Config
+  File "/usr/lib/python3/dist-packages/blueman/main/Config.py", line 2, in <module>
+    from gi.repository import Gio
+  File "/usr/lib/python3/dist-packages/gi/__init__.py", line 42, in <module>
+    from . import _gi
+ImportError: cannot import name '_gi' from partially initialized module 'gi' (most likely due to a circular import) (/usr/lib/python3/dist-packages/gi/__init__.py)
+
+(nm-applet:139637): nm-applet-WARNING **: 13:15:19.811: NetworkManager is not running
+
+** (xfce4-screensaver:139647): WARNING **: 13:15:19.816: screensaver already running in this session
+2022-03-27 13:18:09,386 [   1041]   WARN - Container.ComponentManagerImpl - Do not use constructor injection (requestorClass=com.android.tools.idea.AndroidInitialConfigurator) 
+2022-03-27 13:18:19,823 [  11478]   WARN -            #com.android.ddmlib - adb server version (36) doesn't match this client (41); killing... 
+2022-03-27 13:18:19,826 [  11481]   WARN -            #com.android.ddmlib - * daemon started successfully 
+2022-03-27 13:18:35,099 [  26754]   WARN - ger.EmulatorConnectionListener - Emulator not ready yet, dev.bootcomplete = null 
+2022-03-27 13:18:36,139 [  27794]   WARN - ger.EmulatorConnectionListener - Emulator not ready yet, dev.bootcomplete = null 
+2022-03-27 13:18:37,181 [  28836]   WARN - ger.EmulatorConnectionListener - Emulator not ready yet, dev.bootcomplete = null 
+2022-03-27 13:18:38,218 [  29873]   WARN - ger.EmulatorConnectionListener - Emulator not ready yet, dev.bootcomplete = null 
+2022-03-27 13:18:39,256 [  30911]   WARN - ger.EmulatorConnectionListener - Emulator not ready yet, dev.bootcomplete = null 
+2022-03-27 13:18:40,293 [  31948]   WARN - ger.EmulatorConnectionListener - Emulator not ready yet, dev.bootcomplete = null 
+2022-03-27 13:18:41,370 [  33025]   WARN - ger.EmulatorConnectionListener - Emulator not ready yet, dev.bootcomplete = null 
+2022-03-27 13:18:42,488 [  34143]   WARN - ger.EmulatorConnectionListener - Emulator not ready yet, dev.bootcomplete = null 
+2022-03-27 13:18:43,569 [  35224]   WARN - ger.EmulatorConnectionListener - Emulator not ready yet, dev.bootcomplete = null 
+2022-03-27 13:18:44,011 [  35666]   WARN -            #com.android.ddmlib - An unexpected packet was received before the handshake. 
+2022-03-27 13:18:44,611 [  36266]   WARN - ger.EmulatorConnectionListener - Emulator not ready yet, dev.bootcomplete = null 
+2022-03-27 13:18:45,673 [  37328]   WARN - ger.EmulatorConnectionListener - Emulator not ready yet, dev.bootcomplete = null 
+2022-03-27 13:18:46,864 [  38519]   WARN -            #com.android.ddmlib - An unexpected packet was received before the handshake. 
+2022-03-27 13:18:52,456 [  44111]   WARN - com.intellij.util.xmlb.Binding - no accessors for com.intellij.openapi.updateSettings.impl.pluginsAdvertisement.PluginAdvertiserExtensionsStateService$State 
+thunar-volman: Unsupported USB device type "usb".
+thunar-volman: Unsupported USB device type "usbhid".
+cmd_run.go:772: WARNING: cannot write file at /run/user/1593/.portals-unavailable: open /run/user/1593/.portals-unavailable: no such file or directory
+mkdir: cannot create directory '/run/user/1593': Permission denied
+[143458:143613:0327/132128.126700:ERROR:object_proxy.cc(623)] Failed to call method: org.freedesktop.DBus.ListActivatableNames: object_path= /org/freedesktop/DBus: org.freedesktop.DBus.Error.AccessDenied: An AppArmor policy prevents this sender from sending this message to this recipient; type="method_call", sender=":1.85" (uid=1593 pid=143458 comm="/snap/chromium/1945/usr/lib/chromium-browser/chrom" label="snap.chromium.chromium (enforce)") interface="org.freedesktop.DBus" member="ListActivatableNames" error name="(unset)" requested_reply="0" destination="org.freedesktop.DBus" (bus)
+Failed to create secure directory (/run/user/1593/snap.chromium/pulse): No such file or directory
+ALSA lib conf.c:4120:(snd_config_update_r) Cannot access file /usr/share/alsa/alsa.conf
+ALSA lib pcm.c:2642:(snd_pcm_open_noupdate) Unknown PCM default
+[144033:144033:0327/132157.766829:ERROR:alsa_util.cc(204)] PcmOpen: default,No such file or directory
+ALSA lib conf.c:4120:(snd_config_update_r) Cannot access file /usr/share/alsa/alsa.conf
+ALSA lib pcm.c:2642:(snd_pcm_open_noupdate) Unknown PCM plug:default
+[144033:144033:0327/132157.766860:ERROR:alsa_util.cc(204)] PcmOpen: plug:default,No such file or directory
+[143458:143613:0327/132159.049464:ERROR:object_proxy.cc(623)] Failed to call method: org.freedesktop.PowerManagement.Inhibit.Inhibit: object_path= /org/freedesktop/PowerManagement/Inhibit: org.freedesktop.DBus.Error.AccessDenied: An AppArmor policy prevents this sender from sending this message to this recipient; type="method_call", sender=":1.94" (uid=1593 pid=143458 comm="/snap/chromium/1945/usr/lib/chromium-browser/chrom" label="snap.chromium.chromium (enforce)") interface="org.freedesktop.PowerManagement.Inhibit" member="Inhibit" error name="(unset)" requested_reply="0" destination="org.freedesktop.PowerManagement" (uid=1593 pid=139640 comm="xfce4-power-manager " label="unconfined")
+[143458:143613:0327/132159.049480:ERROR:power_save_blocker_linux.cc(337)] No response to Inhibit() request!
+[143458:143613:0327/132159.172828:ERROR:object_proxy.cc(623)] Failed to call method: org.freedesktop.PowerManagement.Inhibit.Inhibit: object_path= /org/freedesktop/PowerManagement/Inhibit: org.freedesktop.DBus.Error.AccessDenied: An AppArmor policy prevents this sender from sending this message to this recipient; type="method_call", sender=":1.95" (uid=1593 pid=143458 comm="/snap/chromium/1945/usr/lib/chromium-browser/chrom" label="snap.chromium.chromium (enforce)") interface="org.freedesktop.PowerManagement.Inhibit" member="Inhibit" error name="(unset)" requested_reply="0" destination="org.freedesktop.PowerManagement" (uid=1593 pid=139640 comm="xfce4-power-manager " label="unconfined")
+[143458:143613:0327/132159.172878:ERROR:power_save_blocker_linux.cc(337)] No response to Inhibit() request!
+ALSA lib conf.c:4120:(snd_config_update_r) Cannot access file /usr/share/alsa/alsa.conf
+ALSA lib pcm.c:2642:(snd_pcm_open_noupdate) Unknown PCM default
+[144033:144033:0327/133026.294163:ERROR:alsa_util.cc(204)] PcmOpen: default,No such file or directory
+ALSA lib conf.c:4120:(snd_config_update_r) Cannot access file /usr/share/alsa/alsa.conf
+ALSA lib pcm.c:2642:(snd_pcm_open_noupdate) Unknown PCM plug:default
+[144033:144033:0327/133026.294194:ERROR:alsa_util.cc(204)] PcmOpen: plug:default,No such file or directory
+[143458:143613:0327/133026.294356:ERROR:object_proxy.cc(623)] Failed to call method: org.freedesktop.PowerManagement.Inhibit.Inhibit: object_path= /org/freedesktop/PowerManagement/Inhibit: org.freedesktop.DBus.Error.AccessDenied: An AppArmor policy prevents this sender from sending this message to this recipient; type="method_call", sender=":1.176" (uid=1593 pid=143458 comm="/snap/chromium/1945/usr/lib/chromium-browser/chrom" label="snap.chromium.chromium (enforce)") interface="org.freedesktop.PowerManagement.Inhibit" member="Inhibit" error name="(unset)" requested_reply="0" destination="org.freedesktop.PowerManagement" (uid=1593 pid=139640 comm="xfce4-power-manager " label="unconfined")
+[143458:143613:0327/133026.294373:ERROR:power_save_blocker_linux.cc(337)] No response to Inhibit() request!
+[143458:143613:0327/133026.632563:ERROR:object_proxy.cc(623)] Failed to call method: org.freedesktop.PowerManagement.Inhibit.Inhibit: object_path= /org/freedesktop/PowerManagement/Inhibit: org.freedesktop.DBus.Error.AccessDenied: An AppArmor policy prevents this sender from sending this message to this recipient; type="method_call", sender=":1.177" (uid=1593 pid=143458 comm="/snap/chromium/1945/usr/lib/chromium-browser/chrom" label="snap.chromium.chromium (enforce)") interface="org.freedesktop.PowerManagement.Inhibit" member="Inhibit" error name="(unset)" requested_reply="0" destination="org.freedesktop.PowerManagement" (uid=1593 pid=139640 comm="xfce4-power-manager " label="unconfined")
+[143458:143613:0327/133026.632642:ERROR:power_save_blocker_linux.cc(337)] No response to Inhibit() request!
+[143458:143613:0327/133451.464539:ERROR:object_proxy.cc(623)] Failed to call method: org.freedesktop.PowerManagement.Inhibit.Inhibit: object_path= /org/freedesktop/PowerManagement/Inhibit: org.freedesktop.DBus.Error.AccessDenied: An AppArmor policy prevents this sender from sending this message to this recipient; type="method_call", sender=":1.228" (uid=1593 pid=143458 comm="/snap/chromium/1945/usr/lib/chromium-browser/chrom" label="snap.chromium.chromium (enforce)") interface="org.freedesktop.PowerManagement.Inhibit" member="Inhibit" error name="(unset)" requested_reply="0" destination="org.freedesktop.PowerManagement" (uid=1593 pid=139640 comm="xfce4-power-manager " label="unconfined")
+[143458:143613:0327/133451.465174:ERROR:power_save_blocker_linux.cc(337)] No response to Inhibit() request!
+[143458:143613:0327/133509.884695:ERROR:object_proxy.cc(623)] Failed to call method: org.freedesktop.PowerManagement.Inhibit.Inhibit: object_path= /org/freedesktop/PowerManagement/Inhibit: org.freedesktop.DBus.Error.AccessDenied: An AppArmor policy prevents this sender from sending this message to this recipient; type="method_call", sender=":1.235" (uid=1593 pid=143458 comm="/snap/chromium/1945/usr/lib/chromium-browser/chrom" label="snap.chromium.chromium (enforce)") interface="org.freedesktop.PowerManagement.Inhibit" member="Inhibit" error name="(unset)" requested_reply="0" destination="org.freedesktop.PowerManagement" (uid=1593 pid=139640 comm="xfce4-power-manager " label="unconfined")
+[143458:143613:0327/133509.884734:ERROR:power_save_blocker_linux.cc(337)] No response to Inhibit() request!
+[143458:143613:0327/133510.019058:ERROR:object_proxy.cc(623)] Failed to call method: org.freedesktop.PowerManagement.Inhibit.Inhibit: object_path= /org/freedesktop/PowerManagement/Inhibit: org.freedesktop.DBus.Error.AccessDenied: An AppArmor policy prevents this sender from sending this message to this recipient; type="method_call", sender=":1.236" (uid=1593 pid=143458 comm="/snap/chromium/1945/usr/lib/chromium-browser/chrom" label="snap.chromium.chromium (enforce)") interface="org.freedesktop.PowerManagement.Inhibit" member="Inhibit" error name="(unset)" requested_reply="0" destination="org.freedesktop.PowerManagement" (uid=1593 pid=139640 comm="xfce4-power-manager " label="unconfined")
+[143458:143613:0327/133510.019088:ERROR:power_save_blocker_linux.cc(337)] No response to Inhibit() request!
+[143458:143613:0327/133512.420160:ERROR:object_proxy.cc(623)] Failed to call method: org.freedesktop.PowerManagement.Inhibit.Inhibit: object_path= /org/freedesktop/PowerManagement/Inhibit: org.freedesktop.DBus.Error.AccessDenied: An AppArmor policy prevents this sender from sending this message to this recipient; type="method_call", sender=":1.237" (uid=1593 pid=143458 comm="/snap/chromium/1945/usr/lib/chromium-browser/chrom" label="snap.chromium.chromium (enforce)") interface="org.freedesktop.PowerManagement.Inhibit" member="Inhibit" error name="(unset)" requested_reply="0" destination="org.freedesktop.PowerManagement" (uid=1593 pid=139640 comm="xfce4-power-manager " label="unconfined")
+[143458:143613:0327/133512.420189:ERROR:power_save_blocker_linux.cc(337)] No response to Inhibit() request!
+GeglBuffer* gimp_pickable_contiguous_region_by_seed(GimpPickable*, gboolean, gfloat, gboolean, GimpSelectCriterion, gboolean, gint, gint): foo took 0.0025 seconds
+GeglBuffer* gimp_pickable_contiguous_region_by_seed(GimpPickable*, gboolean, gfloat, gboolean, GimpSelectCriterion, gboolean, gint, gint): foo took 0.0052 seconds
+using gegl copy
+GeglBuffer* gimp_pickable_contiguous_region_by_seed(GimpPickable*, gboolean, gfloat, gboolean, GimpSelectCriterion, gboolean, gint, gint): foo took 0.0015 seconds
+GeglBuffer* gimp_pickable_contiguous_region_by_seed(GimpPickable*, gboolean, gfloat, gboolean, GimpSelectCriterion, gboolean, gint, gint): foo took 0.0011 seconds
+using gegl copy
+using gegl copy
+using gegl copy
+GeglBuffer* gimp_pickable_contiguous_region_by_seed(GimpPickable*, gboolean, gfloat, gboolean, GimpSelectCriterion, gboolean, gint, gint): foo took 0.0008 seconds
+using gegl copy
+GeglBuffer* gimp_pickable_contiguous_region_by_seed(GimpPickable*, gboolean, gfloat, gboolean, GimpSelectCriterion, gboolean, gint, gint): foo took 0.0025 seconds
+using gegl copy
+ALSA lib conf.c:4120:(snd_config_update_r) Cannot access file /usr/share/alsa/alsa.conf
+ALSA lib pcm.c:2642:(snd_pcm_open_noupdate) Unknown PCM default
+[144033:144033:0327/133820.077014:ERROR:alsa_util.cc(204)] PcmOpen: default,No such file or directory
+ALSA lib conf.c:4120:(snd_config_update_r) Cannot access file /usr/share/alsa/alsa.conf
+ALSA lib pcm.c:2642:(snd_pcm_open_noupdate) Unknown PCM plug:default
+[144033:144033:0327/133820.077057:ERROR:alsa_util.cc(204)] PcmOpen: plug:default,No such file or directory
+[143458:143613:0327/133820.077260:ERROR:object_proxy.cc(623)] Failed to call method: org.freedesktop.PowerManagement.Inhibit.Inhibit: object_path= /org/freedesktop/PowerManagement/Inhibit: org.freedesktop.DBus.Error.AccessDenied: An AppArmor policy prevents this sender from sending this message to this recipient; type="method_call", sender=":1.259" (uid=1593 pid=143458 comm="/snap/chromium/1945/usr/lib/chromium-browser/chrom" label="snap.chromium.chromium (enforce)") interface="org.freedesktop.PowerManagement.Inhibit" member="Inhibit" error name="(unset)" requested_reply="0" destination="org.freedesktop.PowerManagement" (uid=1593 pid=139640 comm="xfce4-power-manager " label="unconfined")
+[143458:143613:0327/133820.077281:ERROR:power_save_blocker_linux.cc(337)] No response to Inhibit() request!
+[143458:143613:0327/133820.614637:ERROR:object_proxy.cc(623)] Failed to call method: org.freedesktop.PowerManagement.Inhibit.Inhibit: object_path= /org/freedesktop/PowerManagement/Inhibit: org.freedesktop.DBus.Error.AccessDenied: An AppArmor policy prevents this sender from sending this message to this recipient; type="method_call", sender=":1.260" (uid=1593 pid=143458 comm="/snap/chromium/1945/usr/lib/chromium-browser/chrom" label="snap.chromium.chromium (enforce)") interface="org.freedesktop.PowerManagement.Inhibit" member="Inhibit" error name="(unset)" requested_reply="0" destination="org.freedesktop.PowerManagement" (uid=1593 pid=139640 comm="xfce4-power-manager " label="unconfined")
+[143458:143613:0327/133820.614683:ERROR:power_save_blocker_linux.cc(337)] No response to Inhibit() request!
+[143458:143613:0327/133822.032553:ERROR:object_proxy.cc(623)] Failed to call method: org.freedesktop.PowerManagement.Inhibit.Inhibit: object_path= /org/freedesktop/PowerManagement/Inhibit: org.freedesktop.DBus.Error.AccessDenied: An AppArmor policy prevents this sender from sending this message to this recipient; type="method_call", sender=":1.261" (uid=1593 pid=143458 comm="/snap/chromium/1945/usr/lib/chromium-browser/chrom" label="snap.chromium.chromium (enforce)") interface="org.freedesktop.PowerManagement.Inhibit" member="Inhibit" error name="(unset)" requested_reply="0" destination="org.freedesktop.PowerManagement" (uid=1593 pid=139640 comm="xfce4-power-manager " label="unconfined")
+[143458:143613:0327/133822.032573:ERROR:power_save_blocker_linux.cc(337)] No response to Inhibit() request!
+[143458:143613:0327/133823.018004:ERROR:object_proxy.cc(623)] Failed to call method: org.freedesktop.PowerManagement.Inhibit.Inhibit: object_path= /org/freedesktop/PowerManagement/Inhibit: org.freedesktop.DBus.Error.AccessDenied: An AppArmor policy prevents this sender from sending this message to this recipient; type="method_call", sender=":1.262" (uid=1593 pid=143458 comm="/snap/chromium/1945/usr/lib/chromium-browser/chrom" label="snap.chromium.chromium (enforce)") interface="org.freedesktop.PowerManagement.Inhibit" member="Inhibit" error name="(unset)" requested_reply="0" destination="org.freedesktop.PowerManagement" (uid=1593 pid=139640 comm="xfce4-power-manager " label="unconfined")
+[143458:143613:0327/133823.018043:ERROR:power_save_blocker_linux.cc(337)] No response to Inhibit() request!
+[143458:143613:0327/133826.210750:ERROR:object_proxy.cc(623)] Failed to call method: org.freedesktop.PowerManagement.Inhibit.Inhibit: object_path= /org/freedesktop/PowerManagement/Inhibit: org.freedesktop.DBus.Error.AccessDenied: An AppArmor policy prevents this sender from sending this message to this recipient; type="method_call", sender=":1.263" (uid=1593 pid=143458 comm="/snap/chromium/1945/usr/lib/chromium-browser/chrom" label="snap.chromium.chromium (enforce)") interface="org.freedesktop.PowerManagement.Inhibit" member="Inhibit" error name="(unset)" requested_reply="0" destination="org.freedesktop.PowerManagement" (uid=1593 pid=139640 comm="xfce4-power-manager " label="unconfined")
+[143458:143613:0327/133826.210785:ERROR:power_save_blocker_linux.cc(337)] No response to Inhibit() request!
+[143458:143613:0327/133828.690688:ERROR:object_proxy.cc(623)] Failed to call method: org.freedesktop.PowerManagement.Inhibit.Inhibit: object_path= /org/freedesktop/PowerManagement/Inhibit: org.freedesktop.DBus.Error.AccessDenied: An AppArmor policy prevents this sender from sending this message to this recipient; type="method_call", sender=":1.264" (uid=1593 pid=143458 comm="/snap/chromium/1945/usr/lib/chromium-browser/chrom" label="snap.chromium.chromium (enforce)") interface="org.freedesktop.PowerManagement.Inhibit" member="Inhibit" error name="(unset)" requested_reply="0" destination="org.freedesktop.PowerManagement" (uid=1593 pid=139640 comm="xfce4-power-manager " label="unconfined")
+[143458:143613:0327/133828.690734:ERROR:power_save_blocker_linux.cc(337)] No response to Inhibit() request!
+[143458:143613:0327/133943.678053:ERROR:object_proxy.cc(623)] Failed to call method: org.freedesktop.PowerManagement.Inhibit.Inhibit: object_path= /org/freedesktop/PowerManagement/Inhibit: org.freedesktop.DBus.Error.AccessDenied: An AppArmor policy prevents this sender from sending this message to this recipient; type="method_call", sender=":1.265" (uid=1593 pid=143458 comm="/snap/chromium/1945/usr/lib/chromium-browser/chrom" label="snap.chromium.chromium (enforce)") interface="org.freedesktop.PowerManagement.Inhibit" member="Inhibit" error name="(unset)" requested_reply="0" destination="org.freedesktop.PowerManagement" (uid=1593 pid=139640 comm="xfce4-power-manager " label="unconfined")
+[143458:143613:0327/133943.678614:ERROR:power_save_blocker_linux.cc(337)] No response to Inhibit() request!
+[143458:143613:0327/134239.041822:ERROR:object_proxy.cc(623)] Failed to call method: org.freedesktop.PowerManagement.Inhibit.Inhibit: object_path= /org/freedesktop/PowerManagement/Inhibit: org.freedesktop.DBus.Error.AccessDenied: An AppArmor policy prevents this sender from sending this message to this recipient; type="method_call", sender=":1.276" (uid=1593 pid=143458 comm="/snap/chromium/1945/usr/lib/chromium-browser/chrom" label="snap.chromium.chromium (enforce)") interface="org.freedesktop.PowerManagement.Inhibit" member="Inhibit" error name="(unset)" requested_reply="0" destination="org.freedesktop.PowerManagement" (uid=1593 pid=139640 comm="xfce4-power-manager " label="unconfined")
+[143458:143613:0327/134239.042625:ERROR:power_save_blocker_linux.cc(337)] No response to Inhibit() request!
+[143458:143613:0327/134908.200790:ERROR:object_proxy.cc(623)] Failed to call method: org.freedesktop.PowerManagement.Inhibit.Inhibit: object_path= /org/freedesktop/PowerManagement/Inhibit: org.freedesktop.DBus.Error.AccessDenied: An AppArmor policy prevents this sender from sending this message to this recipient; type="method_call", sender=":1.295" (uid=1593 pid=143458 comm="/snap/chromium/1945/usr/lib/chromium-browser/chrom" label="snap.chromium.chromium (enforce)") interface="org.freedesktop.PowerManagement.Inhibit" member="Inhibit" error name="(unset)" requested_reply="0" destination="org.freedesktop.PowerManagement" (uid=1593 pid=139640 comm="xfce4-power-manager " label="unconfined")
+[143458:143613:0327/134908.201270:ERROR:power_save_blocker_linux.cc(337)] No response to Inhibit() request!
+Traceback (most recent call last):
+  File "/usr/bin/blueman-adapters", line 8, in <module>
+    import gi
+  File "/usr/lib/python3/dist-packages/gi/__init__.py", line 42, in <module>
+    from . import _gi
+ImportError: cannot import name '_gi' from partially initialized module 'gi' (most likely due to a circular import) (/usr/lib/python3/dist-packages/gi/__init__.py)
+Traceback (most recent call last):
+  File "/usr/bin/blueman-manager", line 8, in <module>
+    import gi
+  File "/usr/lib/python3/dist-packages/gi/__init__.py", line 42, in <module>
+    from . import _gi
+ImportError: cannot import name '_gi' from partially initialized module 'gi' (most likely due to a circular import) (/usr/lib/python3/dist-packages/gi/__init__.py)
+[143458:143613:0327/135617.888828:ERROR:object_proxy.cc(623)] Failed to call method: org.freedesktop.PowerManagement.Inhibit.Inhibit: object_path= /org/freedesktop/PowerManagement/Inhibit: org.freedesktop.DBus.Error.AccessDenied: An AppArmor policy prevents this sender from sending this message to this recipient; type="method_call", sender=":1.296" (uid=1593 pid=143458 comm="/snap/chromium/1945/usr/lib/chromium-browser/chrom" label="snap.chromium.chromium (enforce)") interface="org.freedesktop.PowerManagement.Inhibit" member="Inhibit" error name="(unset)" requested_reply="0" destination="org.freedesktop.PowerManagement" (uid=1593 pid=139640 comm="xfce4-power-manager " label="unconfined")
+[143458:143613:0327/135617.888889:ERROR:power_save_blocker_linux.cc(337)] No response to Inhibit() request!
+[Child 155546, MediaDecoderStateMachine #2] WARNING: 7f514bc35b50 OpenCubeb() failed to init cubeb: file /build/firefox-I4lRkw/firefox-97.0+build2/dom/media/AudioStream.cpp:331
+[Child 155546, MediaDecoderStateMachine #2] WARNING: Decoder=7f514d4e1d00 [OnMediaSinkAudioError]: file /build/firefox-I4lRkw/firefox-97.0+build2/dom/media/MediaDecoderStateMachine.cpp:4017
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PContent::Msg_DestroyBrowsingContextGroup) Channel closing: too late to send/recv, messages will be lost
+
+[Child 154892, MediaDecoderStateMachine #2] WARNING: 7ff47f41d970 OpenCubeb() failed to init cubeb: file /build/firefox-I4lRkw/firefox-97.0+build2/dom/media/AudioStream.cpp:331
+[Child 154892, MediaDecoderStateMachine #2] WARNING: Decoder=7ff47a0f4000 [OnMediaSinkAudioError]: file /build/firefox-I4lRkw/firefox-97.0+build2/dom/media/MediaDecoderStateMachine.cpp:4017
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PContent::Msg_DestroyBrowsingContextGroup) Channel closing: too late to send/recv, messages will be lost
+
+[Child 165343, MediaDecoderStateMachine #1] WARNING: 7f6b95eef6b0 OpenCubeb() failed to init cubeb: file /build/firefox-I4lRkw/firefox-97.0+build2/dom/media/AudioStream.cpp:331
+[Child 165343, MediaDecoderStateMachine #1] WARNING: Decoder=7f6b962cd700 [OnMediaSinkAudioError]: file /build/firefox-I4lRkw/firefox-97.0+build2/dom/media/MediaDecoderStateMachine.cpp:4017
+[Child 154892, MediaDecoderStateMachine #8] WARNING: 7ff47ab4d2e0 OpenCubeb() failed to init cubeb: file /build/firefox-I4lRkw/firefox-97.0+build2/dom/media/AudioStream.cpp:331
+[Child 154892, MediaDecoderStateMachine #8] WARNING: Decoder=7ff47a0f4000 [OnMediaSinkAudioError]: file /build/firefox-I4lRkw/firefox-97.0+build2/dom/media/MediaDecoderStateMachine.cpp:4017
+[Child 168591, MediaDecoderStateMachine #1] WARNING: 7f2c83620b50 OpenCubeb() failed to init cubeb: file /build/firefox-I4lRkw/firefox-97.0+build2/dom/media/AudioStream.cpp:331
+[Child 168591, MediaDecoderStateMachine #1] WARNING: Decoder=7f2c8266c300 [OnMediaSinkAudioError]: file /build/firefox-I4lRkw/firefox-97.0+build2/dom/media/MediaDecoderStateMachine.cpp:4017
+[Child 168591, MediaDecoderStateMachine #1] WARNING: 7f2c82eea100 OpenCubeb() failed to init cubeb: file /build/firefox-I4lRkw/firefox-97.0+build2/dom/media/AudioStream.cpp:331
+[Child 168591, MediaDecoderStateMachine #1] WARNING: Decoder=7f2c82552700 [OnMediaSinkAudioError]: file /build/firefox-I4lRkw/firefox-97.0+build2/dom/media/MediaDecoderStateMachine.cpp:4017
+[Child 154892, MediaDecoderStateMachine #10] WARNING: 7ff47ab4d2e0 OpenCubeb() failed to init cubeb: file /build/firefox-I4lRkw/firefox-97.0+build2/dom/media/AudioStream.cpp:331
+[Child 154892, MediaDecoderStateMachine #10] WARNING: Decoder=7ff47a0f4000 [OnMediaSinkAudioError]: file /build/firefox-I4lRkw/firefox-97.0+build2/dom/media/MediaDecoderStateMachine.cpp:4017
+ERROR StatusLogger Unrecognized format specifier [d]
+ERROR StatusLogger Unrecognized conversion specifier [d] starting at position 16 in conversion pattern.
+ERROR StatusLogger Unrecognized format specifier [thread]
+ERROR StatusLogger Unrecognized conversion specifier [thread] starting at position 25 in conversion pattern.
+ERROR StatusLogger Unrecognized format specifier [level]
+ERROR StatusLogger Unrecognized conversion specifier [level] starting at position 35 in conversion pattern.
+ERROR StatusLogger Unrecognized format specifier [logger]
+ERROR StatusLogger Unrecognized conversion specifier [logger] starting at position 47 in conversion pattern.
+ERROR StatusLogger Unrecognized format specifier [msg]
+ERROR StatusLogger Unrecognized conversion specifier [msg] starting at position 54 in conversion pattern.
+ERROR StatusLogger Unrecognized format specifier [n]
+ERROR StatusLogger Unrecognized conversion specifier [n] starting at position 56 in conversion pattern.
+ERROR StatusLogger Unrecognized format specifier [d]
+ERROR StatusLogger Unrecognized conversion specifier [d] starting at position 16 in conversion pattern.
+ERROR StatusLogger Unrecognized format specifier [thread]
+ERROR StatusLogger Unrecognized conversion specifier [thread] starting at position 25 in conversion pattern.
+ERROR StatusLogger Unrecognized format specifier [level]
+ERROR StatusLogger Unrecognized conversion specifier [level] starting at position 35 in conversion pattern.
+ERROR StatusLogger Unrecognized format specifier [logger]
+ERROR StatusLogger Unrecognized conversion specifier [logger] starting at position 47 in conversion pattern.
+ERROR StatusLogger Unrecognized format specifier [msg]
+ERROR StatusLogger Unrecognized conversion specifier [msg] starting at position 54 in conversion pattern.
+ERROR StatusLogger Unrecognized format specifier [n]
+ERROR StatusLogger Unrecognized conversion specifier [n] starting at position 56 in conversion pattern.
+
+(JabRef:172344): Gdk-WARNING **: 15:42:32.680: XSetErrorHandler() called with a GDK error trap pushed. Don't do that.
+
+(Thunar:139574): Gtk-CRITICAL **: 15:51:16.353: gtk_main_quit: assertion 'main_loops != NULL' failed
+Failed to list units: Process org.freedesktop.systemd1 exited with status 1
+Failed to expand names: Input/output error
+
+(firefox:140216): GLib-GObject-CRITICAL **: 15:51:16.807: g_object_set_data: assertion 'G_IS_OBJECT (object)' failed
+ExceptionHandler::GenerateDump cloned child 173804
+ExceptionHandler::SendContinueSignalToChild sent continue signal to child
+ExceptionHandler::WaitForContinueSignal waiting for continue signal...
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+
+(xfce4-session:139417): GLib-GObject-WARNING **: 15:51:19.277: invalid unclassed pointer in cast to 'XfsmManager'
+
+** (xiccd:139634): WARNING **: 15:51:19.283: Exiting
+XIO:  fatal IO error 25 (Inappropriate ioctl for device) on X server ":0.0"
+      after 36 requests (36 known processed) with 0 events remaining.
+[141403:0327/155119.292651:ERROR:connection.cc(66)] X connection error received.
+Gdk-Message: 15:51:19.292: crashreporter: Fatal IO error 0 (Success) on X server :0.0.
+
+Gdk-Message: 15:51:19.293: code: Fatal IO error 11 (Resource temporarily unavailable) on X server :0.0.
+

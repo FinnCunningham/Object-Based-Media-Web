@@ -1,0 +1,113 @@
+dbus-update-activation-environment: systemd --user not found, ignoring --systemd argument
+dbus-update-activation-environment: setting DISPLAY=:0
+dbus-update-activation-environment: setting XAUTHORITY=/home/s5117817/.Xauthority
+dbus-update-activation-environment: systemd --user not found, ignoring --systemd argument
+dbus-update-activation-environment: setting QT_ACCESSIBILITY=1
+dbus-update-activation-environment: systemd --user not found, ignoring --systemd argument
+dbus-update-activation-environment: setting SHELL=/bin/bash
+dbus-update-activation-environment: setting QT_ACCESSIBILITY=1
+dbus-update-activation-environment: setting XDG_CONFIG_DIRS=/etc/xdg/xdg-xubuntu:/etc/xdg
+dbus-update-activation-environment: setting XDG_SESSION_PATH=/org/freedesktop/DisplayManager/Session5
+dbus-update-activation-environment: setting CLUTTER_BACKEND=x11
+dbus-update-activation-environment: setting GNOME_KEYRING_CONTROL=/home/s5117817/.cache/keyring-GOWXJ1
+dbus-update-activation-environment: setting LANGUAGE=en_GB:en
+dbus-update-activation-environment: setting DESKTOP_SESSION=xubuntu
+dbus-update-activation-environment: setting PWD=/home/s5117817
+dbus-update-activation-environment: setting XDG_SESSION_DESKTOP=xubuntu
+dbus-update-activation-environment: setting LOGNAME=s5117817
+dbus-update-activation-environment: setting QT_QPA_PLATFORMTHEME=gtk2
+dbus-update-activation-environment: setting XDG_SESSION_TYPE=x11
+dbus-update-activation-environment: setting GPG_AGENT_INFO=/home/s5117817/.gnupg/S.gpg-agent:0:1
+dbus-update-activation-environment: setting XAUTHORITY=/home/s5117817/.Xauthority
+dbus-update-activation-environment: setting XDG_GREETER_DATA_DIR=/var/lib/lightdm-data/s5117817
+dbus-update-activation-environment: setting GDM_LANG=en_GB
+dbus-update-activation-environment: setting HOME=/home/s5117817
+dbus-update-activation-environment: setting IM_CONFIG_PHASE=1
+dbus-update-activation-environment: setting LANG=en_GB.UTF-8
+dbus-update-activation-environment: setting XDG_CURRENT_DESKTOP=XFCE
+dbus-update-activation-environment: setting XDG_SEAT_PATH=/org/freedesktop/DisplayManager/Seat0
+dbus-update-activation-environment: setting GTK_OVERLAY_SCROLLING=0
+dbus-update-activation-environment: setting USER=s5117817
+dbus-update-activation-environment: setting DISPLAY=:0
+dbus-update-activation-environment: setting SHLVL=1
+dbus-update-activation-environment: setting XDG_DATA_DIRS=/usr/share/xubuntu:/usr/share/xfce4:/usr/local/share:/usr/share:/var/lib/snapd/desktop
+dbus-update-activation-environment: setting PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+dbus-update-activation-environment: setting GDMSESSION=xubuntu
+dbus-update-activation-environment: setting DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-wcTT3Vvo84,guid=0d7945e380ba6efa7c4654206241a3f3
+dbus-update-activation-environment: setting _=/usr/bin/dbus-update-activation-environment
+
+(xfce4-session:175667): xfce4-session-WARNING **: 13:03:00.136: xfsm_manager_load_session: Something wrong with /home/s5117817/.cache/sessions/xfce4-session-dev36:0, Does it exist? Permissions issue?
+
+(wrapper-2.0:175832): GLib-GIO-CRITICAL **: 13:03:00.712: g_file_new_for_path: assertion 'path != NULL' failed
+
+(wrapper-2.0:175832): GLib-GIO-CRITICAL **: 13:03:00.712: g_file_monitor_file: assertion 'G_IS_FILE (file)' failed
+
+(wrapper-2.0:175832): GLib-GObject-WARNING **: 13:03:00.712: invalid (NULL) pointer instance
+
+(wrapper-2.0:175832): GLib-GObject-CRITICAL **: 13:03:00.712: g_signal_connect_data: assertion 'G_TYPE_CHECK_INSTANCE (instance)' failed
+
+(wrapper-2.0:175832): Gtk-WARNING **: 13:03:00.712: Attempting to add a widget with type GtkToggleButton to a container of type XfcePanelPlugin, but the widget is already inside a container of type XfcePanelPlugin, please remove the widget from its existing container first.
+Failed to start xfce4-indicator-plugin.target: Process org.freedesktop.systemd1 exited with status 1
+See user logs and 'systemctl --user status xfce4-indicator-plugin.target' for details.
+
+(wrapper-2.0:175832): Gtk-WARNING **: 13:03:00.736: Negative content width -3 (allocation 1, extents 2x2) while allocating gadget (node button, owner GtkToggleButton)
+
+(wrapper-2.0:175829): Gtk-WARNING **: 13:03:00.747: Negative content width -3 (allocation 1, extents 2x2) while allocating gadget (node button, owner GtkToggleButton)
+vmware-user: could not open /proc/fs/vmblock/dev
+Error: /usr/bin/vmtoolsd must be run inside a virtual machine on a VMware hypervisor product.
+
+(wrapper-2.0:175835): Gtk-WARNING **: 13:03:00.768: Negative content width -3 (allocation 1, extents 2x2) while allocating gadget (node button, owner PowerManagerButton)
+
+(wrapper-2.0:175839): Gtk-WARNING **: 13:03:00.792: Negative content width -3 (allocation 1, extents 2x2) while allocating gadget (node button, owner PulseaudioButton)
+Connection failure: Connection refused
+pa_context_connect() failed: Connection refused
+Traceback (most recent call last):
+  File "/usr/share/system-config-printer/applet.py", line 20, in <module>
+    import cups
+ModuleNotFoundError: No module named 'cups'
+Traceback (most recent call last):
+  File "/usr/bin/blueman-applet", line 15, in <module>
+    from blueman.Functions import create_logger, create_parser, set_proc_title
+  File "/usr/lib/python3/dist-packages/blueman/Functions.py", line 36, in <module>
+    from blueman.main.Config import Config
+  File "/usr/lib/python3/dist-packages/blueman/main/Config.py", line 2, in <module>
+    from gi.repository import Gio
+  File "/usr/lib/python3/dist-packages/gi/__init__.py", line 42, in <module>
+    from . import _gi
+ImportError: cannot import name '_gi' from partially initialized module 'gi' (most likely due to a circular import) (/usr/lib/python3/dist-packages/gi/__init__.py)
+
+(polkit-gnome-authentication-agent-1:175870): polkit-gnome-1-WARNING **: 13:03:00.877: Unable to determine the session we are in: No session for pid 175870
+
+** (xiccd:175884): CRITICAL **: 13:03:00.878: failed to create colord device: failed to obtain org.freedesktop.color-manager.create-device auth
+
+(nm-applet:175887): nm-applet-WARNING **: 13:03:00.899: NetworkManager is not running
+
+** (xiccd:175884): CRITICAL **: 13:03:00.911: failed to create colord device: failed to obtain org.freedesktop.color-manager.create-device auth
+
+** (xfce4-screensaver:175900): WARNING **: 13:03:00.918: screensaver already running in this session
+[Child 178322, MediaDecoderStateMachine #1] WARNING: 7ff5c70be3e0 OpenCubeb() failed to init cubeb: file /build/firefox-I4lRkw/firefox-97.0+build2/dom/media/AudioStream.cpp:331
+[Child 178322, MediaDecoderStateMachine #1] WARNING: Decoder=7ff5c9ea0c00 [OnMediaSinkAudioError]: file /build/firefox-I4lRkw/firefox-97.0+build2/dom/media/MediaDecoderStateMachine.cpp:4017
+[Child 178322, MediaDecoderStateMachine #1] WARNING: 7ff5c88a0790 OpenCubeb() failed to init cubeb: file /build/firefox-I4lRkw/firefox-97.0+build2/dom/media/AudioStream.cpp:331
+[Child 178322, MediaDecoderStateMachine #1] WARNING: Decoder=7ff5c9ea0c00 [OnMediaSinkAudioError]: file /build/firefox-I4lRkw/firefox-97.0+build2/dom/media/MediaDecoderStateMachine.cpp:4017
+
+(Thunar:175824): Gtk-CRITICAL **: 13:41:48.712: gtk_main_quit: assertion 'main_loops != NULL' failed
+Failed to list units: Process org.freedesktop.systemd1 exited with status 1
+Failed to expand names: Input/output error
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PContent::Msg_DestroyBrowsingContextGroup) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PContent::Reply_DiscardBrowsingContext) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PContent::Reply_DiscardBrowsingContext) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Parent][PImageBridgeParent] Error: RunMessage(msgname=PImageBridge::Msg_WillClose) Channel closing: too late to send/recv, messages will be lost
+
+
+(xfce4-session:175667): GLib-GObject-WARNING **: 13:41:51.962: invalid unclassed pointer in cast to 'XfsmManager'
+
+** (xiccd:175884): WARNING **: 13:41:51.970: Exiting
+XIO:  fatal IO error 25 (Inappropriate ioctl for device) on X server ":0.0"
+      after 36 requests (36 known processed) with 0 events remaining.

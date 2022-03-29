@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+<body>
+
+<h1>Homepage</h1>
+<button onclick="play();">Yoo</button>
+<div id="tv-content"></div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="js/tv_sockets.js"></script>
+<script>
+    var socket = io();
+
+    function play(){
+        socket.emit("start_video")
+    }
+</script>
+
+</body>

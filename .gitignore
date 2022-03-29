@@ -104,4 +104,6 @@ dist
 .tern-port
 
 
-public/assets/videos/
+public_html/assets/videos/
+
+node_modules/

@@ -10,7 +10,10 @@
 </head>
 
 <body>
-    <div id="room_div">
+    <div id="room_id_div"><p id="room_id_p"></p></div>
+
+    </div>
+    <div id="room_div" style="display: none;">
         <input type="text" id="room_id"/>
         <button onclick="createRoom();">Create room</button>
     </div>
@@ -21,15 +24,12 @@
     <script>
         // var socket = io.connect('https://s5117817.bucomputing.uk', { path: '/node/socket.io/'});
         var socket = io.connect(window.location.origin, {path: '/node/socket.io/'});
-        
         const createRoom = () => {
             roomValueEle = document.getElementById("room_id");
             if(roomValueEle.value != ""){
-                socket.emit("join", roomValueEle.value)
-                document.getElementById("room_div").style.display = "None";
-                localStorage.setItem('room_id', roomValueEle.value)
-            }
-            
+                socket.emit("create_room", roomValueEle.value)
+                console.log("CLIENT SOCKET ID" + socket.id)
+            }                     
         }
     </script>
     <script src="js/tv_sockets.js"></script>

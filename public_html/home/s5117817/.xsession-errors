@@ -1,0 +1,93 @@
+dbus-update-activation-environment: systemd --user not found, ignoring --systemd argument
+dbus-update-activation-environment: setting DISPLAY=:0
+dbus-update-activation-environment: setting XAUTHORITY=/home/s5117817/.Xauthority
+dbus-update-activation-environment: systemd --user not found, ignoring --systemd argument
+dbus-update-activation-environment: setting QT_ACCESSIBILITY=1
+dbus-update-activation-environment: systemd --user not found, ignoring --systemd argument
+dbus-update-activation-environment: setting SHELL=/bin/bash
+dbus-update-activation-environment: setting QT_ACCESSIBILITY=1
+dbus-update-activation-environment: setting XDG_CONFIG_DIRS=/etc/xdg/xdg-xubuntu:/etc/xdg
+dbus-update-activation-environment: setting XDG_SESSION_PATH=/org/freedesktop/DisplayManager/Session3
+dbus-update-activation-environment: setting CLUTTER_BACKEND=x11
+dbus-update-activation-environment: setting GNOME_KEYRING_CONTROL=/home/s5117817/.cache/keyring-14WZJ1
+dbus-update-activation-environment: setting LANGUAGE=en_GB:en
+dbus-update-activation-environment: setting DESKTOP_SESSION=xubuntu
+dbus-update-activation-environment: setting PWD=/home/s5117817
+dbus-update-activation-environment: setting XDG_SESSION_DESKTOP=xubuntu
+dbus-update-activation-environment: setting LOGNAME=s5117817
+dbus-update-activation-environment: setting QT_QPA_PLATFORMTHEME=gtk2
+dbus-update-activation-environment: setting XDG_SESSION_TYPE=x11
+dbus-update-activation-environment: setting GPG_AGENT_INFO=/home/s5117817/.gnupg/S.gpg-agent:0:1
+dbus-update-activation-environment: setting XAUTHORITY=/home/s5117817/.Xauthority
+dbus-update-activation-environment: setting XDG_GREETER_DATA_DIR=/var/lib/lightdm-data/s5117817
+dbus-update-activation-environment: setting GDM_LANG=en_GB
+dbus-update-activation-environment: setting HOME=/home/s5117817
+dbus-update-activation-environment: setting IM_CONFIG_PHASE=1
+dbus-update-activation-environment: setting LANG=en_GB.UTF-8
+dbus-update-activation-environment: setting XDG_CURRENT_DESKTOP=XFCE
+dbus-update-activation-environment: setting XDG_SEAT_PATH=/org/freedesktop/DisplayManager/Seat0
+dbus-update-activation-environment: setting GTK_OVERLAY_SCROLLING=0
+dbus-update-activation-environment: setting USER=s5117817
+dbus-update-activation-environment: setting DISPLAY=:0
+dbus-update-activation-environment: setting SHLVL=1
+dbus-update-activation-environment: setting XDG_DATA_DIRS=/usr/share/xubuntu:/usr/share/xfce4:/usr/local/share:/usr/share:/var/lib/snapd/desktop
+dbus-update-activation-environment: setting PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+dbus-update-activation-environment: setting GDMSESSION=xubuntu
+dbus-update-activation-environment: setting DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-nJY7WRcnyt,guid=be886510eb16a3b5df8fe4da6243177b
+dbus-update-activation-environment: setting _=/usr/bin/dbus-update-activation-environment
+
+(xfce4-session:74188): xfce4-session-WARNING **: 15:28:11.514: xfsm_manager_load_session: Something wrong with /home/s5117817/.cache/sessions/xfce4-session-dev37:0, Does it exist? Permissions issue?
+
+(wrapper-2.0:74353): GLib-GIO-CRITICAL **: 15:28:12.151: g_file_new_for_path: assertion 'path != NULL' failed
+
+(wrapper-2.0:74353): GLib-GIO-CRITICAL **: 15:28:12.151: g_file_monitor_file: assertion 'G_IS_FILE (file)' failed
+
+(wrapper-2.0:74353): GLib-GObject-WARNING **: 15:28:12.151: invalid (NULL) pointer instance
+
+(wrapper-2.0:74353): GLib-GObject-CRITICAL **: 15:28:12.151: g_signal_connect_data: assertion 'G_TYPE_CHECK_INSTANCE (instance)' failed
+
+(wrapper-2.0:74353): Gtk-WARNING **: 15:28:12.151: Attempting to add a widget with type GtkToggleButton to a container of type XfcePanelPlugin, but the widget is already inside a container of type XfcePanelPlugin, please remove the widget from its existing container first.
+Failed to start xfce4-indicator-plugin.target: Process org.freedesktop.systemd1 exited with status 1
+See user logs and 'systemctl --user status xfce4-indicator-plugin.target' for details.
+
+(wrapper-2.0:74351): Gtk-WARNING **: 15:28:12.173: Negative content width -3 (allocation 1, extents 2x2) while allocating gadget (node button, owner GtkToggleButton)
+
+(wrapper-2.0:74353): Gtk-WARNING **: 15:28:12.177: Negative content width -3 (allocation 1, extents 2x2) while allocating gadget (node button, owner GtkToggleButton)
+
+(wrapper-2.0:74357): Gtk-WARNING **: 15:28:12.192: Negative content width -3 (allocation 1, extents 2x2) while allocating gadget (node button, owner PowerManagerButton)
+
+(wrapper-2.0:74359): Gtk-WARNING **: 15:28:12.198: Negative content width -3 (allocation 1, extents 2x2) while allocating gadget (node button, owner PulseaudioButton)
+vmware-user: could not open /proc/fs/vmblock/dev
+Error: /usr/bin/vmtoolsd must be run inside a virtual machine on a VMware hypervisor product.
+
+(polkit-gnome-authentication-agent-1:74396): polkit-gnome-1-WARNING **: 15:28:12.280: Unable to determine the session we are in: No session for pid 74396
+Connection failure: Connection refused
+pa_context_connect() failed: Connection refused
+Traceback (most recent call last):
+  File "/usr/share/system-config-printer/applet.py", line 20, in <module>
+    import cups
+ModuleNotFoundError: No module named 'cups'
+Traceback (most recent call last):
+  File "/usr/bin/blueman-applet", line 15, in <module>
+    from blueman.Functions import create_logger, create_parser, set_proc_title
+  File "/usr/lib/python3/dist-packages/blueman/Functions.py", line 36, in <module>
+    from blueman.main.Config import Config
+  File "/usr/lib/python3/dist-packages/blueman/main/Config.py", line 2, in <module>
+    from gi.repository import Gio
+  File "/usr/lib/python3/dist-packages/gi/__init__.py", line 42, in <module>
+    from . import _gi
+ImportError: cannot import name '_gi' from partially initialized module 'gi' (most likely due to a circular import) (/usr/lib/python3/dist-packages/gi/__init__.py)
+
+** (update-notifier:74402): WARNING **: 15:28:12.343: already running?
+
+** (xiccd:74407): CRITICAL **: 15:28:12.345: failed to create colord device: failed to obtain org.freedesktop.color-manager.create-device auth
+
+** (xiccd:74407): CRITICAL **: 15:28:12.356: failed to create colord device: failed to obtain org.freedesktop.color-manager.create-device auth
+
+(nm-applet:74413): nm-applet-WARNING **: 15:28:12.373: NetworkManager is not running
+
+** (xfce4-screensaver:74427): WARNING **: 15:28:12.388: screensaver already running in this session
+[74932:0329/152853.486844:ERROR:service_worker_storage.cc(1895)] Failed to delete the database: Database IO error
+
+(xfdesktop:74358): GLib-CRITICAL **: 15:28:57.494: g_variant_new_string: assertion 'string != NULL' failed
+Working directory "/home/s5117817/[Invalid UTF-8]" does not exist. It won't be used when spawning "/home/s5117817/FileZilla3/bin/filezilla".

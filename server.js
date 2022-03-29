@@ -8,77 +8,78 @@ var cors = require('cors');
 const io = new Server(server, { 
   path: '/socket.io',
   cors: {
-    // origin: "https://s5117817.bucomputing.uk/node",
     origin: '*',
     methods: ["GET", "POST"],
-    // transports: ['websocket', 'polling'],
-    // credentials: true
+    transports: ['websocket'],
+    upgrade: false
   },
-  // allowEIO3: true
 });
 // set the public folder to serve public assets
-app.use(express.static(__dirname + '/public'));
+app.use(express.static(__dirname + '/public_html'));
 app.use(cors()); 
 
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/views/pages/homepage.html');
 });
 
-// let interval;
 io.on('connection', (socket) => {
   
   console.log('a user connected from ');
-  console.log(io.sockets.adapter.rooms)
-  socket.on('join', (room) => {
-    socket.join(room);
-    console.log("JOINED ROOM " + room)
-    console.log(io.sockets.adapter.rooms)
+  console.log(io.sockets.adapter.rooms);
+  socket.on('create_room', (room) => {
+    let rooms = getActiveRooms(io)
+    if(rooms.includes(room)){
+      console.log(io.sockets.adapter.rooms)
+      io.to(socket.id).emit('room_unavailable');
+    }else{
+      socket.join(room);
+      io.to(socket.id).emit('room_joined', room);
+      console.log("JOINED ROOM " + room)
+    }
   })
 
-  // socket.on('rooms', () => {
-  //   socket.emit('rooms', io.sockets.adapter.rooms);
-  // })  
+  socket.on('room_join', (room) => {
+    socket.join(room);
+    console.log("JOINING: " + room)
+    console.log(io.sockets.adapter.rooms);
+    io.to(socket.id).emit("room_joined", room);
+  })
 
-  socket.on('start_video', function(){
+  socket.on('start_video', function(data){
 		console.log('Starting Video');
-		io.emit('start_video');
+		io.to(data["room_id"]).emit('start_video');
 	});
 
   socket.on('secondary_device_connected', function(){
 		console.log('Secondary device connected');
-    // let rooms = io.sockets.adapter.rooms;
     let rooms = getActiveRooms(io)
     console.log(rooms)
-		io.emit('secondary_device_connected', {"rooms": rooms});
+    let rooms_clients = [];
+    rooms.forEach(room => {
+      rooms_clients.push(io.sockets.adapter.rooms.get(room).size - 1)
+    });
+		io.emit('secondary_device_connected', {"rooms": rooms, "rooms_clients": rooms_clients});
 	});
-  socket.on('play_video', function(id){
+  socket.on('play_video', function(data){
 		console.log('play clip');
-    console.log(id)
-		io.emit('play_video');
+		io.to(data["room_id"]).emit('play_video');
 	});
-  socket.on('pause_video', function(){
-		io.emit('pause_video');
+  socket.on('pause_video', function(data){
+		io.to(data["room_id"]).emit('pause_video');
 	});
-});
-
-
-io.on("connect_error", (e) => {
-  // revert to classic upgrade
-  console.log(e)
-  io.opts.transports = ["polling", "websocket"];
+  socket.on('leave_room', (room) => {
+    socket.leave(room["room"]);
+    console.log("user left: " + room["room"]);
+  })
+  socket.on('disconnect' , function(){
+    console.log("USER DISCONNECTED: " + socket.id)
+  });
 });
 
 function getActiveRooms(io) {
-  // Convert map into 2D list:
-  // ==> [['4ziBKG9XFS06NdtVAAAH', Set(1)], ['room1', Set(2)], ...]
-  const arr = Array.from(io.sockets.adapter.rooms);
-  // Filter rooms whose name exist in set:
-  // ==> [['room1', Set(2)], ['room2', Set(2)]]
-  const filtered = arr.filter(room => !room[1].has(room[0]))
-  // Return only the room name: 
-  // ==> ['room1', 'room2']
-  const res = filtered.map(i => i[0]);
-  return res;
+  const roomArr = Array.from(io.sockets.adapter.rooms);
+  const filtered = roomArr.filter(room => !room[1].has(room[0]))
+  return filtered.map(i => i[0]);
 }
 
 server.listen(40074, () => {
