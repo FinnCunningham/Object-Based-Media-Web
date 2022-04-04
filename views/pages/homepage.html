@@ -2,22 +2,21 @@
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <style>
-        /* .video_player{
+        #tv-content{
             width: 90vw;
             height: 90vh;
-        } */
+            border: 1px dotted darkred;
+        }
     </style>
 </head>
 
 <body>
     <div id="room_id_div"><p id="room_id_p"></p></div>
-
-    </div>
     <div id="room_div" style="display: none;">
         <input type="text" id="room_id"/>
         <button onclick="createRoom();">Create room</button>
     </div>
-    
+
     <div id="tv-content"></div>
 
     <script src="/node/socket.io/socket.io.js"></script>

@@ -9,10 +9,13 @@ $(function () {
             socket.emit("room_join", localStorage.getItem("room_id"));
         }
     })
+
     socket.on('start_video', (msg) => {
         console.log("BACK" + socket.id)
         console.log("STARTING VIDEO...")
-        $('#tv-content').html("<video id='videoClip' class='video_player' width='90%' height='90%'><source src='/assets/videos/FINAL Highlights 2021 US Open Pool Championship.mp4' type='video/mp4'></video>");    
+        let videoBaseUrl = '/assets/videos/';
+        let vidUrl = ''
+        $('#tv-content').html("<video id='videoClip' class='video_player' width='90%' height='90%'><source src='/assets/videos/FINAL Highlights 2021 US Open Pool Championship/FINAL Highlights 2021 US Open Pool Championship.mp4' type='video/mp4'></video>");    
         document.getElementById("videoClip").load();
     })
     

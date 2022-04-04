@@ -4,6 +4,8 @@ const http = require('http');
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 var cors = require('cors');
+const fs = require('fs');
+let finalJson = {};
 
 const io = new Server(server, { 
   path: '/socket.io',
@@ -21,9 +23,14 @@ app.use(cors());
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/views/pages/homepage.html');
 });
+// getAllVideos()
+// .then((json) => {console.log(json); console.log("HITHIHITHIT")})
+// (async () =>{ 
+//   await getAllVideos()
+//   console.log("HIT")
+// });
 
 io.on('connection', (socket) => {
-  
   console.log('a user connected from ');
   console.log(io.sockets.adapter.rooms);
   socket.on('create_room', (room) => {
@@ -75,6 +82,88 @@ io.on('connection', (socket) => {
     console.log("USER DISCONNECTED: " + socket.id)
   });
 });
+
+async function getAllVideos(){
+  let baseURL = 'public_html/assets/videos/';
+  // let finalJson = {};
+  let filter = 'json';
+  // let jsonFilesData;
+  // let tempJSON = {};
+  return new Promise((resolve, reject) => {
+    fs.readdir(baseURL, (err, files) => {
+      // console.log(files);
+      files.forEach((folder, index) => {
+        fs.readdir(baseURL + "/" + folder, (err, childFiles) => {
+          childFiles.forEach((childFile, indexChild) => {
+            let filename = baseURL + folder + "/" + childFile;
+            if (childFile.indexOf(filter)>=0) {
+              let data =  fs.readFile(filename, 'utf8', (err, rawJson) => {
+                
+                let json = JSON.parse(rawJson);
+                console.log("Title" + json["desc"]);
+                finalJson[folder] = {
+                  "video-url": json["fileprefix"] + ".mp4",
+                  "title": json["title"],
+                  "desc": json["desc"]
+                }
+                // console.log(finalJson)
+              })
+              console.log("data" + data) 
+  
+              console.log('-- found: ',filename);
+              
+            }
+            if(indexChild == childFiles.length - 1 && index == files.length - 1){
+              console.log("HIT INDEX")
+              resolve(finalJson);
+  
+            }
+            // console.log(childFiles)
+            // finalJson[file] = {}
+          })
+  
+        });
+      });  
+    });
+  })
+  
+}
+
+const getDirectories = (source, callback) =>
+  fs.readdir(source, { withFileTypes: true }, (err, files) => {
+    if (err) {
+      callback(err)
+    } else {
+      callback(
+        files
+          .filter(dirent => dirent.isDirectory())
+          .map(dirent => dirent.name)
+      )
+    }
+  })
+
+getDirectories("public_html/assets/videos/", (files)=>{
+  files.forEach((file)=>{
+    console.log("public_html/assets/videos/" + file + "/")
+    getDirectories("public_html/assets/videos/" + file + "/", (childFiles)=>{console.log(childFiles)});
+  })
+
+});
+
+
+// async function getJsonFile(){
+//   fs.readFile(filename, 'utf8', (err, rawJson) => {
+              
+//     let json = JSON.parse(rawJson);
+//     console.log("Title" + json["desc"]);
+//     finalJson[folder] = {
+//       "video-url": json["fileprefix"] + ".mp4",
+//       "title": json["title"],
+//       "desc": json["desc"]
+//     }
+//     // console.log(finalJson)
+//   });
+// }
 
 function getActiveRooms(io) {
   const roomArr = Array.from(io.sockets.adapter.rooms);
