@@ -1,5 +1,7 @@
 $(function () {
     // var socket = io.connect('https://s5117817.bucomputing.uk', { path: '/node/socket.io/'});
+    // let filePath = '';
+
     socket.on('connect', () => {
         if(!localStorage.getItem("room_id") || localStorage.getItem("room_id") == undefined){
             document.getElementById("room_div").style.display = "block";
@@ -10,12 +12,25 @@ $(function () {
         }
     })
 
-    socket.on('start_video', (msg) => {
-        console.log("BACK" + socket.id)
+    // socket.on('video_selected', (callback)=>{
+    //     console.log("HIT")
+    //     if(filePath){
+    //         callback(true);
+    //     }else{
+    //         callback(false);
+    //     }
+        
+    // });
+
+    // socket.on('set_video_video_client', (file)=>{
+    //     filePath = file + "/" + file;
+    // });
+
+    socket.on('start_video_video_client', (path) => {
         console.log("STARTING VIDEO...")
         let videoBaseUrl = '/assets/videos/';
-        let vidUrl = ''
-        $('#tv-content').html("<video id='videoClip' class='video_player' width='90%' height='90%'><source src='/assets/videos/FINAL Highlights 2021 US Open Pool Championship/FINAL Highlights 2021 US Open Pool Championship.mp4' type='video/mp4'></video>");    
+        let filePath = path + "/" + path;
+        $('#tv-content').html("<video id='videoClip' class='video_player' width='90%' height='90%'><source src='" + videoBaseUrl + filePath + ".mp4' type='video/mp4'></video>");    
         document.getElementById("videoClip").load();
     })
     

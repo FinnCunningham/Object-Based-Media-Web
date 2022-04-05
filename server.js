@@ -5,7 +5,16 @@ const server = http.createServer(app);
 const { Server } = require("socket.io");
 var cors = require('cors');
 const fs = require('fs');
+const internal = require('stream');
 let finalJson = {};
+let roomsMatrixMap = {};
+/**
+ * TODO:
+ *  -tidy up code
+ *  -remove path when the room is closed.
+ */
+
+
 
 const io = new Server(server, { 
   path: '/socket.io',
@@ -19,30 +28,106 @@ const io = new Server(server, {
 // set the public folder to serve public assets
 app.use(express.static(__dirname + '/public_html'));
 app.use(cors()); 
+let getRoomObj = ()=>{
+  fs.readFile('resources/rooms.json', 'utf8', function readFileCallback(err, data){
+    if(data){
+      console.log(JSON.parse(data))
+
+    }
+  })
+}
+getRoomObj();
 
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/views/pages/homepage.html');
 });
-// getAllVideos()
-// .then((json) => {console.log(json); console.log("HITHIHITHIT")})
-// (async () =>{ 
-//   await getAllVideos()
-//   console.log("HIT")
-// });
 
 io.on('connection', (socket) => {
   console.log('a user connected from ');
   console.log(io.sockets.adapter.rooms);
+
   socket.on('create_room', (room) => {
     let rooms = getActiveRooms(io)
     if(rooms.includes(room)){
       console.log(io.sockets.adapter.rooms)
       io.to(socket.id).emit('room_unavailable');
     }else{
+      fs.readFile('resources/rooms.json', 'utf8', function readFileCallback(err, data){
+        if (err){
+            console.log(err);
+        } else {
+          let obj = {};
+          if(data){
+            obj = JSON.parse(data); //now it an object
+          }
+          let tempObj = {}
+          tempObj[room] = {path: ""}
+          let newJson = {...obj, ...{[room]: {path: ""}}}
+          newJson = JSON.stringify(newJson); //convert it back to json
+          fs.writeFile('resources/rooms.json', newJson, 'utf8', ()=>{console.log("WRITTEN TO VIDEO JSON FILE")}); // write it back 
+        }
+      });
+      
       socket.join(room);
       io.to(socket.id).emit('room_joined', room);
       console.log("JOINED ROOM " + room)
     }
+  })
+
+  socket.on('video_selected', (callback)=>{    
+    console.log([...socket.rooms].filter(item => item != socket.id))
+    console.log(roomsMatrixMap)
+    fs.readFile('resources/rooms.json', 'utf8', function readFileCallback(err, data){
+      if (err){
+          console.log(err);
+      } else {
+        let obj = {}
+        if(data){
+          obj = JSON.parse(data); //now it an object
+        }
+        let room = [...socket.rooms].filter(item => item != socket.id);
+        console.log(obj)
+        console.log(room)
+        if(obj[room].path){
+          callback(true);
+        }else{
+            callback(false);
+        }
+      }
+    });
+    
+  });
+
+  socket.on('update_videos', ()=>{
+    getNestedFileData((data, folderMax)=>{
+      finalJson = {...finalJson, ...data};
+      console.log(finalJson);
+      console.log("Folder Max: " + folderMax)
+      if(folderMax){
+        // End of check.
+        console.log("====================")
+        console.log(finalJson)
+        console.log("====================")
+        let jsonFile = 'public_html/assets/videos/videos.json'
+        fs.readFile(jsonFile, 'utf8', function readFileCallback(err, data){
+          if (err){
+              console.log(err);
+          } else {
+            obj = JSON.parse(data); //now it an object
+            let newJson = {...obj, ...finalJson}
+            newJson = JSON.stringify(newJson); //convert it back to json
+            fs.writeFile(jsonFile, newJson, 'utf8', ()=>{console.log("WRITTEN TO VIDEO JSON FILE")}); // write it back 
+          }
+        });
+      }  
+    })
+  })
+
+  socket.on('return_videos', (callback) => {
+    let jsonFile = 'public_html/assets/videos/videos.json';
+    fs.readFile(jsonFile, 'utf8', function readFileCallback(err, data){
+      callback(JSON.stringify(data));
+    })
   })
 
   socket.on('room_join', (room) => {
@@ -52,9 +137,39 @@ io.on('connection', (socket) => {
     io.to(socket.id).emit("room_joined", room);
   })
 
-  socket.on('start_video', function(data){
+  socket.on('set_video', (fileprefix) => {
+    console.log(fileprefix);
+    // roomsMatrixMap[[...socket.rooms].filter(item => item != socket.id)].path = fileprefix;
+    fs.readFile('resources/rooms.json', 'utf8', function readFileCallback(err, data){
+      if (err){
+          console.log(err);
+      } else {
+        obj = JSON.parse(data); //now it an object
+        let room = [...socket.rooms].filter(item => item != socket.id);
+
+        // let newJson = {...obj, ...{room: {path: fileprefix}}}
+         //convert it back to json
+        // let tempObj = {}
+        // tempObj[room] = {path: fileprefix}
+        let newJson = {...obj, ...{[room]: {path: fileprefix}}}
+        newJson = JSON.stringify(newJson);
+        fs.writeFile('resources/rooms.json', newJson, 'utf8', ()=>{console.log("WRITTEN TO VIDEO JSON FILE")}); // write it back 
+      }
+    });
+    io.to(socket.id).emit('set_video_video_client', fileprefix)
+  });
+
+  socket.on('start_video', function(clientData){
 		console.log('Starting Video');
-		io.to(data["room_id"]).emit('start_video');
+    fs.readFile('resources/rooms.json', 'utf8', function readFileCallback(err, data){
+      if(data){
+        let obj = JSON.parse(data)
+        let room = [...socket.rooms].filter(item => item != socket.id)
+        let filePath = obj[room].path;
+        io.to(clientData["room_id"]).emit('start_video_video_client', filePath);
+        console.log(clientData["room_id"])
+      }
+    })
 	});
 
   socket.on('secondary_device_connected', function(){
@@ -83,87 +198,51 @@ io.on('connection', (socket) => {
   });
 });
 
-async function getAllVideos(){
-  let baseURL = 'public_html/assets/videos/';
-  // let finalJson = {};
-  let filter = 'json';
-  // let jsonFilesData;
-  // let tempJSON = {};
-  return new Promise((resolve, reject) => {
-    fs.readdir(baseURL, (err, files) => {
-      // console.log(files);
-      files.forEach((folder, index) => {
-        fs.readdir(baseURL + "/" + folder, (err, childFiles) => {
-          childFiles.forEach((childFile, indexChild) => {
-            let filename = baseURL + folder + "/" + childFile;
-            if (childFile.indexOf(filter)>=0) {
-              let data =  fs.readFile(filename, 'utf8', (err, rawJson) => {
-                
-                let json = JSON.parse(rawJson);
-                console.log("Title" + json["desc"]);
-                finalJson[folder] = {
-                  "video-url": json["fileprefix"] + ".mp4",
-                  "title": json["title"],
-                  "desc": json["desc"]
-                }
-                // console.log(finalJson)
-              })
-              console.log("data" + data) 
-  
-              console.log('-- found: ',filename);
-              
-            }
-            if(indexChild == childFiles.length - 1 && index == files.length - 1){
-              console.log("HIT INDEX")
-              resolve(finalJson);
-  
-            }
-            // console.log(childFiles)
-            // finalJson[file] = {}
-          })
-  
-        });
-      });  
-    });
-  })
-  
-}
-
-const getDirectories = (source, callback) =>
+const getDirectories = (source, callback, directoryNeeded) => {
   fs.readdir(source, { withFileTypes: true }, (err, files) => {
     if (err) {
       callback(err)
     } else {
       callback(
+        ( directoryNeeded ? 
         files
           .filter(dirent => dirent.isDirectory())
-          .map(dirent => dirent.name)
+          .map(dirent => dirent.name) 
+          : files.map(dirent => dirent.name)
+        )
       )
     }
   })
+}
 
-getDirectories("public_html/assets/videos/", (files)=>{
-  files.forEach((file)=>{
-    console.log("public_html/assets/videos/" + file + "/")
-    getDirectories("public_html/assets/videos/" + file + "/", (childFiles)=>{console.log(childFiles)});
-  })
-
-});
+// https://s5117817.bucomputing.uk/assets/videos/The_FA_Cup_2021_22_Quarter-Final/The_FA_Cup_2021_22_-_Quarter-Final_Southampton_v_Manchester_City_m0015p1g_original.jpg
 
 
-// async function getJsonFile(){
-//   fs.readFile(filename, 'utf8', (err, rawJson) => {
-              
-//     let json = JSON.parse(rawJson);
-//     console.log("Title" + json["desc"]);
-//     finalJson[folder] = {
-//       "video-url": json["fileprefix"] + ".mp4",
-//       "title": json["title"],
-//       "desc": json["desc"]
-//     }
-//     // console.log(finalJson)
-//   });
-// }
+function getNestedFileData(innerCallback){
+  let baseURL = 'public_html/assets/videos/';
+  getDirectories("public_html/assets/videos/", (files)=>{
+    files.forEach((file, folderIndex)=>{
+      getDirectories("public_html/assets/videos/" + file + "/", (childFiles)=>{
+        childFiles.forEach((childFile, childIndex) => {
+          let filename = baseURL + file + "/" + childFile;
+          if (childFile.indexOf('.json')>=0) {
+            fs.readFile(filename, 'utf8', (err, rawJson) => {
+              let tempData = {};
+              let json = JSON.parse(rawJson);
+              tempData[file] = {
+                "video-url": json["fileprefix"] + ".mp4",
+                "title": json["title"],
+                "desc": json["desc"],
+                "fileprefix": json["fileprefix"]
+              }
+              innerCallback(tempData, folderIndex == files.length - 1);
+            })
+          }
+        });
+      });
+    }, false)
+  }, true);
+}
 
 function getActiveRooms(io) {
   const roomArr = Array.from(io.sockets.adapter.rooms);
