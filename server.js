@@ -5,15 +5,17 @@ const server = http.createServer(app);
 const { Server } = require("socket.io");
 var cors = require('cors');
 const fs = require('fs');
-const internal = require('stream');
+const theSportsDb = require('./controlers/sportsDbController.js')
+
 let finalJson = {};
-let roomsMatrixMap = {};
 /**
  * TODO:
  *  -tidy up code
  *  -remove path when the room is closed.
+ *  -FIX RUGBY - show rugby after hometeam name
+ *      -Add sport to metadata
+ *      -Then in update_videos -> add Rugby after hometeam if the sport == rugby getsportDBEvent
  */
-
 
 
 const io = new Server(server, { 
@@ -76,7 +78,6 @@ io.on('connection', (socket) => {
 
   socket.on('video_selected', (callback)=>{    
     console.log([...socket.rooms].filter(item => item != socket.id))
-    console.log(roomsMatrixMap)
     fs.readFile('resources/rooms.json', 'utf8', function readFileCallback(err, data){
       if (err){
           console.log(err);
@@ -84,43 +85,84 @@ io.on('connection', (socket) => {
         let obj = {}
         if(data){
           obj = JSON.parse(data); //now it an object
+          let room = [...socket.rooms].filter(item => item != socket.id);
+          console.log(obj)
+          console.log(room)
+          if(obj[room].path){
+            callback(true);
+          }else{
+              callback(false);
+          } 
         }
-        let room = [...socket.rooms].filter(item => item != socket.id);
-        console.log(obj)
-        console.log(room)
-        if(obj[room].path){
-          callback(true);
-        }else{
-            callback(false);
-        }
+        
       }
     });
     
   });
 
   socket.on('update_videos', ()=>{
-    getNestedFileData((data, folderMax)=>{
-      finalJson = {...finalJson, ...data};
-      console.log(finalJson);
-      console.log("Folder Max: " + folderMax)
-      if(folderMax){
-        // End of check.
-        console.log("====================")
-        console.log(finalJson)
-        console.log("====================")
-        let jsonFile = 'public_html/assets/videos/videos.json'
-        fs.readFile(jsonFile, 'utf8', function readFileCallback(err, data){
-          if (err){
-              console.log(err);
-          } else {
-            obj = JSON.parse(data); //now it an object
-            let newJson = {...obj, ...finalJson}
-            newJson = JSON.stringify(newJson); //convert it back to json
-            fs.writeFile(jsonFile, newJson, 'utf8', ()=>{console.log("WRITTEN TO VIDEO JSON FILE")}); // write it back 
+    // theSportsDb.getPlayers(1514444, 'The_FA_Cup_2021_22_-_Quarter-Final_Southampton_v_Manchester_City_m0015p1g_original').then((sportsDBData)=>{
+      getNestedFileData((data, folderMax)=>{
+        let tempObj = {}
+        for(var propName in data) {
+          if(data.hasOwnProperty(propName)) {
+              tempObj = data[propName];
+              // do something with each element here
           }
-        });
-      }  
-    })
+        }
+
+        if(tempObj.date){
+          let homeTeamName = tempObj.hometeam;
+          if(tempObj.sport == "Rugby"){
+            homeTeamName = tempObj.hometeam + " Rugby";
+          }
+          theSportsDb.getsportDBEvent(homeTeamName, tempObj.date).then((id)=>{
+            console.log(id)
+            theSportsDb.getPlayers(id, tempObj.fileprefix).then((sportsDBData)=>{
+              if(data[sportsDBData.fileprefix]){
+                // console.log("SAME")
+                // console.log(sportsDBData.fileprefix)
+                data[sportsDBData.fileprefix]["teams"] = sportsDBData.teams;
+              }
+              finalJson = {...finalJson, ...data};
+              // console.log("==================")
+              // console.log("Folder Max: " + folderMax)
+              if(folderMax){
+                // End of check.
+                // console.log("====================")
+                // console.log(finalJson)
+                // console.log("====================")
+                let jsonFile = 'public_html/assets/videos/videos.json'
+                fs.readFile(jsonFile, 'utf8', function readFileCallback(err, data){
+                  if (err){
+                      console.log(err);
+                  } else {
+                    obj = JSON.parse(data); //now it an object
+                    let newJson = {...obj, ...finalJson}
+                    newJson = JSON.stringify(newJson); //convert it back to json
+                    // console.log(newJson)
+                    fs.writeFile(jsonFile, newJson, 'utf8', ()=>{console.log("WRITTEN TO VIDEO JSON FILE");}); // write it back 
+                  }
+                });
+              }  
+            })
+          })
+        }
+      })
+
+      //   Object.keys(data).forEach((video)=> {
+      //     console.log(video)
+      //     if(video.date){
+      //       theSportsDb.getsportDBEvent(video.hometeam, video.date).then((id)=>{
+      //         theSportsDb.getPlayers(id, video.fileprefix)
+      //         .then((sportsDBData)=>{
+                
+      //         })
+      //       })
+      //     }
+          
+      //   })
+      // })
   })
 
   socket.on('return_videos', (callback) => {
@@ -139,18 +181,12 @@ io.on('connection', (socket) => {
 
   socket.on('set_video', (fileprefix) => {
     console.log(fileprefix);
-    // roomsMatrixMap[[...socket.rooms].filter(item => item != socket.id)].path = fileprefix;
     fs.readFile('resources/rooms.json', 'utf8', function readFileCallback(err, data){
       if (err){
           console.log(err);
       } else {
         obj = JSON.parse(data); //now it an object
         let room = [...socket.rooms].filter(item => item != socket.id);
-
-        // let newJson = {...obj, ...{room: {path: fileprefix}}}
-         //convert it back to json
-        // let tempObj = {}
-        // tempObj[room] = {path: fileprefix}
         let newJson = {...obj, ...{[room]: {path: fileprefix}}}
         newJson = JSON.stringify(newJson);
         fs.writeFile('resources/rooms.json', newJson, 'utf8', ()=>{console.log("WRITTEN TO VIDEO JSON FILE")}); // write it back 
@@ -189,6 +225,33 @@ io.on('connection', (socket) => {
   socket.on('pause_video', function(data){
 		io.to(data["room_id"]).emit('pause_video');
 	});
+
+  socket.on('show_players', (team)=>{
+    // videos.json (teams) -> by fileprefix -> by room obj
+    let jsonFile = 'public_html/assets/videos/videos.json'
+    fs.readFile(jsonFile, 'utf8', function readFileCallback(err, data){
+      if (err){
+        console.log(err);
+      } else {
+        let videoObject = JSON.parse(data); //now it an object
+        fs.readFile('resources/rooms.json', 'utf8', function readFileCallback(err, roomData){
+          if(data){
+            let obj = JSON.parse(roomData)
+            let room = [...socket.rooms].filter(item => item != socket.id)
+            let filePath = obj[room].path;
+            console.log(obj)
+            console.log(room)
+            console.log("===============")
+            console.log(filePath)
+            console.log(videoObject[filePath].teams)
+          }
+        })
+      }
+    })
+    // console.log(team)
+
+  })
+
   socket.on('leave_room', (room) => {
     socket.leave(room["room"]);
     console.log("user left: " + room["room"]);
@@ -233,7 +296,11 @@ function getNestedFileData(innerCallback){
                 "video-url": json["fileprefix"] + ".mp4",
                 "title": json["title"],
                 "desc": json["desc"],
-                "fileprefix": json["fileprefix"]
+                "fileprefix": json["fileprefix"],
+                "hometeam": json["hometeam"],
+                "awayteam": json["awayteam"],
+                "date": json["firstbcastdate"],
+                "sport": json["sport"]
               }
               innerCallback(tempData, folderIndex == files.length - 1);
             })
