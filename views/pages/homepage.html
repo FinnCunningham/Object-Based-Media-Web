@@ -2,12 +2,29 @@
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <style>
+        body{
+            margin: 0;
+            overflow: hidden;
+        }
         #tv-content{
+            width: 60vw;
+        }
+        /* .container {
+            position:relative;
             width: 90vw;
             height: 90vh;
-            border: 1px dotted darkred;
+         } */
+        .container video {
+            position:relative;
+            z-index:0;
         }
-    </style>
+        .overlay {
+            position:absolute;
+            top:0;
+            left:0;
+            z-index:1;
+        }
+            </style>
 </head>
 
 <body>
@@ -16,9 +33,14 @@
         <input type="text" id="room_id"/>
         <button onclick="createRoom();">Create room</button>
     </div>
-
-    <div id="tv-content"></div>
-
+    <div class="container" id="container">
+        <div id="tv-content">
+            
+        </div>
+        <div style="width: 50px; height: 50px; position: absolute; bottom: 0%; right: 10px; background-color: red;" onclick="fullscreen()"></div>
+        
+    </div>
+    
     <script src="/node/socket.io/socket.io.js"></script>
     <script>
         // var socket = io.connect('https://s5117817.bucomputing.uk', { path: '/node/socket.io/'});
@@ -29,6 +51,38 @@
                 socket.emit("create_room", roomValueEle.value)
                 console.log("CLIENT SOCKET ID" + socket.id)
             }                     
+        }
+
+        const request = () => {
+            return document.documentElement.requestFullscreen || document.documentElement.msRequestFullscreen ||
+                document.documentElement.mozRequestFullScreen || document.documentElement.webkitRequestFullscreen;
+        }
+
+        const cancel = () => {
+            return document.exitFullscreen || document.msCancelFullScreen || document.mozRequestFullScreen || document.webkitCancelFullScreen;
+        }
+
+        const isFullScreen = () => {
+            return document.isFullScreen || document.msIsFullScreen || document.mozIsFullScreen || document.webkitIsFullScreen;
+        }
+
+        const fullscreen = () => {
+            //custom fullscreen since the fullscreen api breaks overlay
+            if (isFullScreen()){ 
+                cancel().call(document)
+                document.getElementById("tv-content").style.marginTop = "100px";
+                document.getElementById("tv-content").style.width = "60vw";
+                document.getElementById("room_id_div").style.display = "Block";
+            }
+            else {
+                request().call(document.documentElement);
+                if(document.getElementById("videoClip")){
+                    document.getElementById("tv-content").style.marginTop = "0px";
+                    document.getElementById("tv-content").style.width = "100vw";
+                    document.getElementById("room_id_div").style.display = "None";
+
+                }
+            }
         }
     </script>
     <script src="js/tv_sockets.js"></script>

@@ -12,9 +12,6 @@ let finalJson = {};
  * TODO:
  *  -tidy up code
  *  -remove path when the room is closed.
- *  -FIX RUGBY - show rugby after hometeam name
- *      -Add sport to metadata
- *      -Then in update_videos -> add Rugby after hometeam if the sport == rugby getsportDBEvent
  */
 
 
@@ -78,30 +75,35 @@ io.on('connection', (socket) => {
 
   socket.on('video_selected', (callback)=>{    
     console.log([...socket.rooms].filter(item => item != socket.id))
-    fs.readFile('resources/rooms.json', 'utf8', function readFileCallback(err, data){
-      if (err){
-          console.log(err);
-      } else {
-        let obj = {}
-        if(data){
-          obj = JSON.parse(data); //now it an object
-          let room = [...socket.rooms].filter(item => item != socket.id);
-          console.log(obj)
-          console.log(room)
-          if(obj[room].path){
-            callback(true);
-          }else{
-              callback(false);
-          } 
-        }
-        
+    fs.stat('resources/rooms.json', (err, stat) => {
+      if(err == null){
+        fs.readFile('resources/rooms.json', 'utf8', function readFileCallback(err, data){
+          if (err){
+              console.log(err);
+          } else {
+            let obj = {}
+            if(data){
+              obj = JSON.parse(data); //now it an object
+              let room = [...socket.rooms].filter(item => item != socket.id);
+              console.log(obj)
+              console.log(room)
+              if(obj[room].path){
+                callback(true);
+              }else{
+                  callback(false);
+              } 
+            }
+            
+          }
+        });
+      }else{
+        callback(false);
       }
-    });
+    })   
     
   });
 
   socket.on('update_videos', ()=>{
-    // theSportsDb.getPlayers(1514444, 'The_FA_Cup_2021_22_-_Quarter-Final_Southampton_v_Manchester_City_m0015p1g_original').then((sportsDBData)=>{
       getNestedFileData((data, folderMax)=>{
         let tempObj = {}
         for(var propName in data) {
@@ -120,18 +122,11 @@ io.on('connection', (socket) => {
             console.log(id)
             theSportsDb.getPlayers(id, tempObj.fileprefix).then((sportsDBData)=>{
               if(data[sportsDBData.fileprefix]){
-                // console.log("SAME")
-                // console.log(sportsDBData.fileprefix)
                 data[sportsDBData.fileprefix]["teams"] = sportsDBData.teams;
               }
               finalJson = {...finalJson, ...data};
-              // console.log("==================")
-              // console.log("Folder Max: " + folderMax)
               if(folderMax){
                 // End of check.
-                // console.log("====================")
-                // console.log(finalJson)
-                // console.log("====================")
                 let jsonFile = 'public_html/assets/videos/videos.json'
                 fs.readFile(jsonFile, 'utf8', function readFileCallback(err, data){
                   if (err){
@@ -149,20 +144,6 @@ io.on('connection', (socket) => {
           })
         }
       })
-
-      //   Object.keys(data).forEach((video)=> {
-      //     console.log(video)
-      //     if(video.date){
-      //       theSportsDb.getsportDBEvent(video.hometeam, video.date).then((id)=>{
-      //         theSportsDb.getPlayers(id, video.fileprefix)
-      //         .then((sportsDBData)=>{
-                
-      //         })
-      //       })
-      //     }
-          
-      //   })
-      // })
   })
 
   socket.on('return_videos', (callback) => {
@@ -181,29 +162,52 @@ io.on('connection', (socket) => {
 
   socket.on('set_video', (fileprefix) => {
     console.log(fileprefix);
-    fs.readFile('resources/rooms.json', 'utf8', function readFileCallback(err, data){
-      if (err){
-          console.log(err);
-      } else {
-        obj = JSON.parse(data); //now it an object
-        let room = [...socket.rooms].filter(item => item != socket.id);
-        let newJson = {...obj, ...{[room]: {path: fileprefix}}}
-        newJson = JSON.stringify(newJson);
-        fs.writeFile('resources/rooms.json', newJson, 'utf8', ()=>{console.log("WRITTEN TO VIDEO JSON FILE")}); // write it back 
+    fs.stat('resources/rooms.json', (err, stat) => {
+      if(err == null){
+        fs.readFile('resources/rooms.json', 'utf8', function readFileCallback(err, data){
+          if (err){
+              console.log(err);
+          } else {
+            let roomObj = {}
+            if(data){
+              roomObj = JSON.parse(data); //now it an object
+    
+            }
+            let room = [...socket.rooms].filter(item => item != socket.id);
+            let newJson = {...roomObj, ...{[room]: {path: fileprefix}}}
+            newJson = JSON.stringify(newJson);
+            fs.writeFile('resources/rooms.json', newJson, 'utf8', ()=>{console.log("WRITTEN TO VIDEO JSON FILE")}); // write it back 
+          }
+        });
+      }else{
+      let roomObj = {}
+      let room = [...socket.rooms].filter(item => item != socket.id);
+      let newJson = {...roomObj, ...{[room]: {path: fileprefix}}}
+      newJson = JSON.stringify(newJson);
+      fs.writeFile('resources/rooms.json', newJson, {flag: 'wx'}, ()=>{console.log("WRITTEN TO VIDEO JSON FILE")}); // write it back 
       }
-    });
+    })
+    
+    
     io.to(socket.id).emit('set_video_video_client', fileprefix)
   });
 
-  socket.on('start_video', function(clientData){
+  socket.on('start_video', function(clientData, callback){
 		console.log('Starting Video');
     fs.readFile('resources/rooms.json', 'utf8', function readFileCallback(err, data){
       if(data){
         let obj = JSON.parse(data)
         let room = [...socket.rooms].filter(item => item != socket.id)
-        let filePath = obj[room].path;
-        io.to(clientData["room_id"]).emit('start_video_video_client', filePath);
-        console.log(clientData["room_id"])
+        console.log(room)
+        if(room.length > 0){
+          let filePath = obj[room].path;
+          io.to(clientData["room_id"]).emit('start_video_video_client', filePath);
+          console.log(clientData["room_id"])
+          callback(false)
+        }else{
+          callback(true)
+        }
+        
       }
     })
 	});
@@ -226,8 +230,9 @@ io.on('connection', (socket) => {
 		io.to(data["room_id"]).emit('pause_video');
 	});
 
-  socket.on('show_players', (team)=>{
+  socket.on('show_players_server', (duration, callback)=>{
     // videos.json (teams) -> by fileprefix -> by room obj
+    console.log(duration)
     let jsonFile = 'public_html/assets/videos/videos.json'
     fs.readFile(jsonFile, 'utf8', function readFileCallback(err, data){
       if (err){
@@ -237,13 +242,17 @@ io.on('connection', (socket) => {
         fs.readFile('resources/rooms.json', 'utf8', function readFileCallback(err, roomData){
           if(data){
             let obj = JSON.parse(roomData)
+            console.log(socket.rooms);
             let room = [...socket.rooms].filter(item => item != socket.id)
-            let filePath = obj[room].path;
-            console.log(obj)
             console.log(room)
-            console.log("===============")
-            console.log(filePath)
-            console.log(videoObject[filePath].teams)
+            if(room.length > 0){
+              let filePath = obj[room].path;
+              console.log("HIT")
+              io.to(room).emit('show_players_client', videoObject[filePath].teams, duration)
+            }else{
+              callback(true);
+            }
+            
           }
         })
       }
@@ -255,9 +264,12 @@ io.on('connection', (socket) => {
   socket.on('leave_room', (room) => {
     socket.leave(room["room"]);
     console.log("user left: " + room["room"]);
+
   })
   socket.on('disconnect' , function(){
+  
     console.log("USER DISCONNECTED: " + socket.id)
+    console.log("ROOM: " + socket.rooms.size )
   });
 });
 
@@ -277,9 +289,6 @@ const getDirectories = (source, callback, directoryNeeded) => {
     }
   })
 }
-
-// https://s5117817.bucomputing.uk/assets/videos/The_FA_Cup_2021_22_Quarter-Final/The_FA_Cup_2021_22_-_Quarter-Final_Southampton_v_Manchester_City_m0015p1g_original.jpg
-
 
 function getNestedFileData(innerCallback){
   let baseURL = 'public_html/assets/videos/';

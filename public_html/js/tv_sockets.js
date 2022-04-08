@@ -12,25 +12,39 @@ $(function () {
         }
     })
 
-    // socket.on('video_selected', (callback)=>{
-    //     console.log("HIT")
-    //     if(filePath){
-    //         callback(true);
-    //     }else{
-    //         callback(false);
-    //     }
-        
-    // });
-
-    // socket.on('set_video_video_client', (file)=>{
-    //     filePath = file + "/" + file;
-    // });
+    socket.on('show_players_client', (players, duration) => {
+        let container = document.getElementById("container");
+        let overlay = document.createElement("div");
+        overlay.style = "position:absolute;top:5%;right:10px;z-index:1;display:flex;background: rgba(0, 0, 0, 0.5);"
+        players.forEach((team, teamIndex) => {
+            let teamDiv = document.createElement("div");
+            teamDiv.style.color = "white";
+            let teamP = document.createElement("p");
+            if (teamIndex == 0) {
+                teamP.innerText = "Home Team"
+            }else{
+                teamP.innerText = "Away Team"
+            }
+            teamDiv.appendChild(teamP);
+            team.forEach(player => {
+                let p = document.createElement("p")
+                p.innerText = player;
+                teamDiv.appendChild(p)
+            });    
+            overlay.appendChild(teamDiv)
+        });
+        container.appendChild(overlay);
+        setTimeout(
+        function(){
+            overlay.remove();
+        }, duration);
+    })
 
     socket.on('start_video_video_client', (path) => {
         console.log("STARTING VIDEO...")
         let videoBaseUrl = '/assets/videos/';
         let filePath = path + "/" + path;
-        $('#tv-content').html("<video id='videoClip' class='video_player' width='90%' height='90%'><source src='" + videoBaseUrl + filePath + ".mp4' type='video/mp4'></video>");    
+        $('#tv-content').html("<video id='videoClip' class='video_player' width='100%'><source src='" + videoBaseUrl + filePath + ".mp4' type='video/mp4'></video>");    
         document.getElementById("videoClip").load();
     })
     
