@@ -16,6 +16,7 @@ $(function () {
         let container = document.getElementById("container");
         let overlay = document.createElement("div");
         overlay.style = "position:absolute;top:5%;right:10px;z-index:1;display:flex;background: rgba(0, 0, 0, 0.5);"
+        console.log(players)
         players.forEach((team, teamIndex) => {
             let teamDiv = document.createElement("div");
             teamDiv.style.color = "white";
@@ -28,7 +29,7 @@ $(function () {
             teamDiv.appendChild(teamP);
             team.forEach(player => {
                 let p = document.createElement("p")
-                p.innerText = player;
+                p.innerText = player["name"];
                 teamDiv.appendChild(p)
             });    
             overlay.appendChild(teamDiv)

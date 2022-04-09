@@ -26,7 +26,7 @@ const getPlayers = (id, fileprefix) => axios.get('https://www.thesportsdb.com/ev
       // Player
       const playerText = $(playerEle).children('a')[0].childNodes;
       const final = $(playerText).toArray().filter(child => child.type == 'text').map((finalText) => {return $(finalText).text()});
-      homeTeam.push(final.join(' '))
+      homeTeam.push({"name": final.join(' ')})
     })
     //End of row
   })
@@ -38,12 +38,17 @@ const getPlayers = (id, fileprefix) => axios.get('https://www.thesportsdb.com/ev
       // Player
       const playerText = $(playerEle).children('a')[0].childNodes;
       const final = $(playerText).toArray().filter(child => child.type == 'text').map((finalText) => {return $(finalText).text()});
-      awayTeam.push(final.join(' '));
+      awayTeam.push({"name": final.join(' ')});
     })
     //End of row
   })
   return({fileprefix: fileprefix, teams: [homeTeam, awayTeam]})
 })
 
+const getPlayerDetails = (playerName) => axios.get('https://www.thesportsdb.com/api/v1/json/2/searchplayers.php?p=' + playerName)
+.then((response)=>{
+  return response.data.player[0];
+})
 exports.getsportDBEvent = getsportDBEvent;
 exports.getPlayers = getPlayers;
+exports.getPlayerDetails = getPlayerDetails;

@@ -14,7 +14,6 @@ let finalJson = {};
  *  -remove path when the room is closed.
  */
 
-
 const io = new Server(server, { 
   path: '/socket.io',
   cors: {
@@ -36,6 +35,17 @@ let getRoomObj = ()=>{
   })
 }
 getRoomObj();
+
+// theSportsDb.getPlayerDetails('Mohammed%20Salisu').then((details)=>{
+//   console.log("Nationality: " + details["strNationality"])
+//   console.log(details["dateBorn"])
+//   console.log(details["strSigning"])
+//   console.log(details["strBirthLocation"])
+//   console.log(details["strGender"])
+//   console.log(details["strPosition"])
+//   console.log(details["strHeight"])
+//   console.log(details["strWeight"])
+// })
 
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/views/pages/homepage.html');
@@ -120,31 +130,92 @@ io.on('connection', (socket) => {
           }
           theSportsDb.getsportDBEvent(homeTeamName, tempObj.date).then((id)=>{
             console.log(id)
+            if(id)
             theSportsDb.getPlayers(id, tempObj.fileprefix).then((sportsDBData)=>{
               if(data[sportsDBData.fileprefix]){
                 data[sportsDBData.fileprefix]["teams"] = sportsDBData.teams;
               }
-              finalJson = {...finalJson, ...data};
-              if(folderMax){
-                // End of check.
-                let jsonFile = 'public_html/assets/videos/videos.json'
-                fs.readFile(jsonFile, 'utf8', function readFileCallback(err, data){
-                  if (err){
-                      console.log(err);
-                  } else {
-                    obj = JSON.parse(data); //now it an object
-                    let newJson = {...obj, ...finalJson}
-                    newJson = JSON.stringify(newJson); //convert it back to json
-                    // console.log(newJson)
-                    fs.writeFile(jsonFile, newJson, 'utf8', ()=>{console.log("WRITTEN TO VIDEO JSON FILE");}); // write it back 
-                  }
+              let playersPromise = [];
+              data[sportsDBData.fileprefix]["teams"].forEach((team, teamIndex) => {
+                team.forEach((player, playerIndex) => {
+                  let teamMax = data[sportsDBData.fileprefix]["teams"].length - 1== teamIndex;
+                  let playerMax = data[sportsDBData.fileprefix]["teams"][teamIndex].length - 1 == playerIndex;
+                  playersPromise.push(getPlayerDetailsLocal(player, playerIndex, teamIndex, data, sportsDBData, folderMax, teamMax && playerMax));
                 });
-              }  
+              });
+              Promise.all(playersPromise)
+              .then((finalPlayersData) => {
+                // data[sportsDBData.fileprefix]["teams"].filter(child) = tempPlayerArr; 
+                let tempIndex = 0;
+                let tempTeamIndex = 0;
+                finalPlayersData.forEach((finalPlayer, finalPlayerIndex) => {
+                  if(finalPlayerIndex == data[sportsDBData.fileprefix]["teams"][0].length){
+                    tempIndex = 0;
+                    tempTeamIndex++;
+                  }
+                  console.log(tempIndex);
+                  console.log(tempTeamIndex)
+                  console.log("=========")
+                  data[sportsDBData.fileprefix]["teams"][tempTeamIndex][tempIndex] = finalPlayer; 
+
+                  tempIndex++;
+                });
+                // console.log(finalPlayersData)
+                finalJson = {...finalJson, ...data};
+                if(folderMax){
+                  // End of check.
+                  let jsonFile = 'public_html/assets/videos/videos.json'
+                  fs.stat(jsonFile, (err, stat) => {
+                    if(err){
+                      // console.log(finalJson)
+                      console.log(err)
+                      fs.writeFile(jsonFile, finalJson, {flag: 'w'}, ()=>{console.log("WRITTEN TO VIDEO JSON FILE");}); // write it back 
+                    }else{
+                      fs.readFile(jsonFile, 'utf8', function readFileCallback(err, data){
+                        if (err){
+                            console.log(err);
+                        } else {
+                          let newJson = {};
+                          try{
+                            obj = JSON.parse(data); //now it an object
+                            newJson = {...obj, ...finalJson}
+                            newJson = JSON.stringify(newJson); //convert it back to json
+                          }catch{
+                            newJson = JSON.stringify(finalJson);           
+                          }
+                          // console.log(newJson)
+                          console.log("===========")
+                          fs.writeFile(jsonFile, newJson, 'utf8', ()=>{console.log("WRITTEN TO VIDEO JSON FILE");}); // write it back 
+                        }
+                      });
+                    }
+                  })
+                }  
+              })
             })
           })
         }
       })
   })
+
+  async function getPlayerDetailsLocal (player){
+    
+    return new Promise((resolve, reject) =>{theSportsDb.getPlayerDetails(encodeURI(player["name"])).then((details)=>{
+      let tempPlayerArr = {
+        "name": player["name"],
+        "nationality": details["strNationality"],
+        "birthDate": details["dateBorn"],
+        "signingCost": details["strSigning"],
+        "birthLocation": details["strBirthLocation"],
+        "gender": details["strGender"],
+        "position": details["strPosition"],
+        "height": details["strHeight"],
+        "weight": details["strWeight"]
+      };
+      setTimeout(resolve, 2000 , tempPlayerArr);
+      // data[sportsDBData.fileprefix]["teams"][teamIndex][playerIndex] = tempPlayerArr; 
+    })})
+  }
 
   socket.on('return_videos', (callback) => {
     let jsonFile = 'public_html/assets/videos/videos.json';
@@ -232,22 +303,18 @@ io.on('connection', (socket) => {
 
   socket.on('show_players_server', (duration, callback)=>{
     // videos.json (teams) -> by fileprefix -> by room obj
-    console.log(duration)
     let jsonFile = 'public_html/assets/videos/videos.json'
-    fs.readFile(jsonFile, 'utf8', function readFileCallback(err, data){
+    fs.readFile(jsonFile, 'utf8', function readFileCallback(err, videoData){
       if (err){
         console.log(err);
       } else {
-        let videoObject = JSON.parse(data); //now it an object
+        let videoObject = JSON.parse(videoData);
         fs.readFile('resources/rooms.json', 'utf8', function readFileCallback(err, roomData){
-          if(data){
+          if(videoData){
             let obj = JSON.parse(roomData)
-            console.log(socket.rooms);
             let room = [...socket.rooms].filter(item => item != socket.id)
-            console.log(room)
             if(room.length > 0){
               let filePath = obj[room].path;
-              console.log("HIT")
               io.to(room).emit('show_players_client', videoObject[filePath].teams, duration)
             }else{
               callback(true);
