@@ -7,7 +7,8 @@
             overflow: hidden;
         }
         #tv-content{
-            width: 60vw;
+            margin-top: 20px;
+            width: 80vw;
         }
         /* .container {
             position:relative;
@@ -70,8 +71,8 @@
             //custom fullscreen since the fullscreen api breaks overlay
             if (isFullScreen()){ 
                 cancel().call(document)
-                document.getElementById("tv-content").style.marginTop = "100px";
-                document.getElementById("tv-content").style.width = "60vw";
+                document.getElementById("tv-content").style.marginTop = "20px";
+                document.getElementById("tv-content").style.width = "80vw";
                 document.getElementById("room_id_div").style.display = "Block";
             }
             else {

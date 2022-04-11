@@ -123,14 +123,11 @@ io.on('connection', (socket) => {
               // do something with each element here
           }
         }
-
         if(tempObj.date){
           let homeTeamName = tempObj.hometeam;
           if(tempObj.sport == "Rugby"){
             homeTeamName = tempObj.hometeam + " Rugby";
           }
-          console.log(data)
-
           let jsonFile = 'public_html/assets/videos/videos.json'
           fs.stat(jsonFile, (err, stat) => {
             if(err){
@@ -138,121 +135,61 @@ io.on('connection', (socket) => {
             }else{
               fs.readFile(jsonFile, 'utf8', function readFileCallback(err, videoFileData){
                 try{
-                  let videoObj = JSON.parse(videoFileData);
-                  console.log("=======<<<<<<<<<<<<<")
-                  console.log(videoObj[tempObj.fileprefix])
-                  console.log(folderMax + "======================")
+                  videoObj = {};
+                  try{
+                    videoObj = JSON.parse(videoFileData);
+                  }catch{}
                   if(videoObj[tempObj.fileprefix] && videoObj[tempObj.fileprefix]["teams"]){
                     //if there is a team, don't overwrite
-                    console.log("exists")
-                    console.log(videoObj[tempObj.fileprefix]["sport"])
-                    finalJson = {...finalJson, ...videoObj[tempObj.fileprefix]}
+                    let fileprefix = tempObj.fileprefix;
+                    finalJson = {...finalJson, ...{[fileprefix]: videoObj[tempObj.fileprefix]}}
                     
                   }else{
-                    console.log("HEREHEHEHEHHEHEHEH ")
                     filesToUpdate.push([homeTeamName, tempObj]);
-                    console.log(filesToUpdate)
                     finalJson = {...finalJson, ...data};
                 }
-                console.log(finalJson)
                 if(folderMax){
                   console.log("MAST MAX")
-                  let allIdspromise = [];
-                  filesToUpdate.forEach(fileToUpdate => {
-                    allIdspromise.push(getAllFileTeamIdsLocal(fileToUpdate[0], fileToUpdate[1]))
-                  });
-                  console.log(filesToUpdate)
-                  Promise.all(allIdspromise)
-                  .then((finalIdsData)=>{
-                    let teamsPromise = []
-                    finalIdsData.forEach((idObj) =>{
-                      teamsPromise.push(getAllPlayersDataLocal(idObj[0], idObj[1]));
-                    })
-                    console.log(finalIdsData)
-                    Promise.all(teamsPromise)
-                    .then((sportsDBDatas)=>{
-                      console.log(sportsDBDatas)
-                      console.log("IN HERE")
-                      sportsDBDatas.forEach(sportsDBData => {
-                        console.log(finalJson)
-                          if(finalJson[sportsDBData.fileprefix]){
-                            finalJson[sportsDBData.fileprefix]["teams"] = sportsDBData.teams;
-                          }else{
-                            // data[sportsDBData.fileprefix] = 
+                  console.log("MX+=========================================")
+                  returnDataAllSources(filesToUpdate, finalJson).then((theSportsDbData)=>{
+                    // console.log(theSportsDbData)
+                    console.log("==================")
+                    finalJson = {...finalJson, ...theSportsDbData}
+                    jsonFile = 'public_html/assets/videos/videos.json'
+                    fs.stat(jsonFile, (err, stat) => {
+                      if(err){
+                        // console.log(finalJson)
+                        console.log(err)
+                        fs.writeFile(jsonFile, finalJson, {flag: 'w'}, ()=>{console.log("WRITTEN TO VIDEO JSON FILE");}); // write it back 
+                      }else{
+                        fs.readFile(jsonFile, 'utf8', function readFileCallback(err, data){
+                          if (err){
+                              console.log(err);
+                          } else {
+                            let newJson = {};
+                            try{
+                              // obj = JSON.parse(finalJson); //now it an object
+                              // newJson = {...obj, ...finalJson}
+                              newJson = JSON.stringify(finalJson); //convert it back to json
+                            }catch{
+                              newJson = JSON.stringify(finalJson);           
+                            }
+                            console.log("===========")
+                            fs.writeFile(jsonFile, newJson, 'utf8', ()=>{console.log("WRITTEN TO VIDEO JSON FILE");}); // write it back 
                           }
-                          finalJson[sportsDBData.fileprefix]["teams"] = sportsDBData.teams;
-
-                          let playersPromise = [];
-                          console.log(data)
-                          console.log(sportsDBData.fileprefix)
-                          finalJson[sportsDBData.fileprefix]["teams"].forEach((team, teamIndex) => {
-                            team.forEach((player, playerIndex) => {
-                              let teamMax = finalJson[sportsDBData.fileprefix]["teams"].length - 1== teamIndex;
-                              let playerMax = finalJson[sportsDBData.fileprefix]["teams"][teamIndex].length - 1 == playerIndex;
-                              playersPromise.push(getPlayerDetailsLocal(player, playerIndex, teamIndex, finalJson, sportsDBData, folderMax, teamMax && playerMax));
-                            });
-                          });
-                          Promise.all(playersPromise)
-                          .then((finalPlayersData) => {
-                            let tempIndex = 0;
-                            let tempTeamIndex = 0;
-                            finalPlayersData.forEach((finalPlayer, finalPlayerIndex) => {
-                              if(finalPlayerIndex == finalJson[sportsDBData.fileprefix]["teams"][0].length){
-                                tempIndex = 0;
-                                tempTeamIndex++;
-                              }
-                              console.log(tempIndex);
-                              console.log(tempTeamIndex)
-                              console.log("=========")
-                              finalJson[sportsDBData.fileprefix]["teams"][tempTeamIndex][tempIndex] = finalPlayer; 
-    
-                              tempIndex++;
-                            });
-                            // finalJson = {...finalJson, ...data};
-                            console.log("186 line")
-    
-                            // End of check.
-                            jsonFile = 'public_html/assets/videos/videos.json'
-                            fs.stat(jsonFile, (err, stat) => {
-                              if(err){
-                                // console.log(finalJson)
-                                console.log(err)
-                                fs.writeFile(jsonFile, finalJson, {flag: 'w'}, ()=>{console.log("WRITTEN TO VIDEO JSON FILE");}); // write it back 
-                              }else{
-                                fs.readFile(jsonFile, 'utf8', function readFileCallback(err, data){
-                                  if (err){
-                                      console.log(err);
-                                  } else {
-                                    let newJson = {};
-                                    try{
-                                      // obj = JSON.parse(finalJson); //now it an object
-                                      // newJson = {...obj, ...finalJson}
-                                      newJson = JSON.stringify(finalJson); //convert it back to json
-                                    }catch{
-                                      newJson = JSON.stringify(finalJson);           
-                                    }
-                                    // console.log(newJson)
-                                    console.log("===========")
-                                    fs.writeFile(jsonFile, newJson, 'utf8', ()=>{console.log("WRITTEN TO VIDEO JSON FILE");}); // write it back 
-                                  }
-                                });
-                              }
-                            })
-
-                          })
-                        
-                      });
-
-                    }) 
+                        });
+                      }
+                    })
                   })
+                  
                 }
                 console.log("HIT")
                 //Only write if there is no team made
-                theSportsDb.getsportDBEvent(homeTeamName, tempObj.date).then((id)=>{
-                console.log(id)
-                // if(id)
+              //   theSportsDb.getsportDBEvent(homeTeamName, tempObj.date).then((id)=>{
+              //   console.log(id)
+              //   // if(id)
                 
-              })
+              // })
               }catch(e){
                 console.log(e)
                 console.log("HIT ERROR")
@@ -267,6 +204,88 @@ io.on('connection', (socket) => {
         }
       })
   })
+
+async function returnDataAllSources(filesToUpdate, fileJson){
+  let newData = {...fileJson};
+  console.log(filesToUpdate)
+  // if(filesToUpdate )
+  return new Promise((resolve, reject)=>{
+    let allIdsPromise = [];
+    let allEsportsPromise = [];
+    filesToUpdate.forEach(fileToUpdate => {
+      if(fileToUpdate[1].sport == 'Football' || fileToUpdate[1].sport == 'Rugby'){
+        allIdsPromise.push(getAllFileTeamIdsLocal(fileToUpdate[0], fileToUpdate[1]))
+      }else if(fileToUpdate[1].sport == 'Esport'){
+        // allEsportsPromise.push(getAllEsportsData(fileToUpdate[0], fileToUpdate[1]))
+      }
+    });
+    resolve(returnAllSportsDbData(allIdsPromise, newData));
+  })
+}
+
+async function returnAllSportsDbData(allIdsPromise, newData){
+  // let newData = {...fileJson};
+  // console.log(filesToUpdate)
+  // if(filesToUpdate )
+  return new Promise((resolve, reject)=>{
+    // let allIdspromise = [];
+    // filesToUpdate.forEach(fileToUpdate => {
+    //   if(fileToUpdate[1].sport == 'Football' || fileToUpdate[1].sport == 'Rugby'){
+
+    //   }
+    //   allIdspromise.push(getAllFileTeamIdsLocal(fileToUpdate[0], fileToUpdate[1]))
+    // });
+    Promise.all(allIdsPromise)
+    .then((finalIdsData)=>{
+      let teamsPromise = []
+      finalIdsData.forEach((idObj) =>{
+        teamsPromise.push(getAllPlayersDataLocal(idObj[0], idObj[1]));
+      })
+      let playersPromise = [];
+      let fileprefixs = [];
+      Promise.all(teamsPromise)
+      .then((sportsDBDatas)=>{
+        sportsDBDatas.forEach(sportsDBData => {
+            if(newData[sportsDBData.fileprefix]){
+              newData[sportsDBData.fileprefix]["teams"] = sportsDBData.teams;
+            }else{
+              // data[sportsDBData.fileprefix] = 
+            }
+            newData[sportsDBData.fileprefix]["teams"] = sportsDBData.teams;
+            newData[sportsDBData.fileprefix]["teams"].forEach((team, teamIndex) => {
+              team.forEach((player) => {
+                playersPromise.push(getPlayerDetailsLocal(player));
+                fileprefixs.push(sportsDBData.fileprefix)
+              });
+            });
+            
+        });
+        Promise.all(playersPromise)
+        .then((finalPlayersData) => {
+          let tempIndex = 0;
+          let tempTeamIndex = 0;
+          finalPlayersData.forEach((finalPlayer, finalPlayerIndex) => {
+            if(finalPlayerIndex == newData[fileprefixs[finalPlayerIndex]]["teams"][0].length){
+              tempIndex = 0;
+              tempTeamIndex++;
+            }
+            newData[fileprefixs[finalPlayerIndex]]["teams"][tempTeamIndex][tempIndex] = finalPlayer; 
+            console.log(finalPlayer)
+            tempIndex++;
+            console.log("INSIDE FOR")
+          });
+          console.log("END OF FOR")
+          // finalJson = {...finalJson, ...data};
+
+          // End of check.
+          resolve(newData)
+
+        })      
+        
+      }) 
+    })
+  })
+}
 
 async function getAllFileTeamIdsLocal(homeTeamName, tempObj){
   return new Promise((resolve, rejet)=>{
@@ -298,7 +317,8 @@ async function getAllPlayersDataLocal(id, fileprefix){
         "height": details["strHeight"],
         "weight": details["strWeight"]
       };
-      setTimeout(resolve, 1000 , tempPlayerArr);
+      resolve(tempPlayerArr)
+      // setTimeout(resolve, 3000 , tempPlayerArr);
       // data[sportsDBData.fileprefix]["teams"][teamIndex][playerIndex] = tempPlayerArr; 
     })})
   }
