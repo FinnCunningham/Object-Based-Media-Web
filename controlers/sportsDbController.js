@@ -9,6 +9,18 @@ const https = require('https');
 // })
 //  1514444
 
+// All Sports Info
+// https://www.thesportsdb.com/api/v1/json/2/all_sports.php
+
+const getSportInfo = (sport) => 
+  axios.get('https://www.thesportsdb.com/api/v1/json/2/all_sports.php')
+  .then((response)=>{
+    // console.log(response.data)
+    let data = response.data["sports"].filter(sportObj => sportObj.strSport == sport)
+    return data
+  })
+
+
 const getsportDBEvent = (hometeam, date) => axios.get('https://www.thesportsdb.com/api/v1/json/2/searchevents.php?e=' + hometeam + '&d=' + date)
 .then((response)=>{
   return response.data.event[0].idEvent
@@ -52,3 +64,4 @@ const getPlayerDetails = (playerName) => axios.get('https://www.thesportsdb.com/
 exports.getsportDBEvent = getsportDBEvent;
 exports.getPlayers = getPlayers;
 exports.getPlayerDetails = getPlayerDetails;
+exports.getSportInfo = getSportInfo;

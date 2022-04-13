@@ -11,6 +11,9 @@
     "type": "git",
     "url": "git+https://github.com/FinnCunningham/Object-Based-Media-Project-Web.git"
   },
+  "nodemonConfig":{
+    "ignore": ["*.json"]
+ },
   "author": "",
   "license": "ISC",
   "bugs": {

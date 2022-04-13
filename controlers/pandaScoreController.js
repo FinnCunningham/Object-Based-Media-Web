@@ -1,12 +1,35 @@
 const axios = require('axios'); 
+// async function getGameData(date, name, token){
+//     return new Promise((resolve, reject)=>{
+//         let range = date + "T12:00:00Z," +  date + "T22:00:00Z";
+//         console.log("BEFORE REQUEST")
+//         console.log('https://api.pandascore.co/csgo/matches?per_page=3&range[begin_at]=' + range + '&sort=begin_at&search[name]=' + encodeURI(name)+"&token=" + token)
+        
+//             console.log("123")
+//             axios.get('https://api.pandascore.co/csgo/matches?per_page=3&range[begin_at]=' + range + '&sort=begin_at&search[name]=' + encodeURI(name)+"&token=" + token)
+//             .then((response)=>{
+//                 console.log("DURING REQUEST")
+//                 // console.log(response["data"])
+//                 resolve(response["data"]);
+//             })
+        
+        
+//     })
+// }
 
-// https://api.pandascore.co/csgo/matches?page=1&per_page=5&range[begin_at]=2021-01-24T15:20:00Z,2021-01-24T21:00:00Z&sort=begin_at&search[name]= Vitality vs Natus Vincere
-//https://www.bbc.co.uk/iplayer/episode/l002t8jy/esports-csgo-blast-premier-2020-csgo-blast-premier-global-final-day-six
-//API - ul5RBe3fXjrzQYaWwZFXg7hv_ACaKq1kTrK7hI7KlmLIm7KYTsc
-const getGameData = (date, name) => {
-    let range = date + "T12:00:00Z," +  date + "T22:00:00Z";
-    axios.get('https://api.pandascore.co/csgo/matches?per_page=3&range[begin_at]=' + range + '&sort=begin_at&search[name]=' + name)
+const getGameData = (range, name, token) =>
+    axios.get('https://api.pandascore.co/csgo/matches?per_page=3&range[begin_at]=' + range + '&sort=begin_at&search[name]=' + encodeURI(name)+"&token=" + token)
     .then((response)=>{
-        return response.data;
+        console.log("DURING REQUEST")
+        // console.log(response["data"])
+        return response["data"];
     })
-}
+        
+const getTeamData = (teamId, token)=>
+    axios.get('https://api.pandascore.co/teams/' + teamId + '?token=' + token)
+    .then((response)=>{
+        return response["data"];
+    })
+
+exports.getGameData = getGameData;
+exports.getTeamData = getTeamData;

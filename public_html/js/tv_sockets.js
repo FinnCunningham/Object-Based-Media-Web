@@ -41,6 +41,40 @@ $(function () {
         }, duration);
     })
 
+    socket.on('show_sport_info_client', (info, type, duration)=>{
+        let container = document.getElementById("container");
+        let overlay = document.createElement("div");
+        overlay.style = "position:absolute;top:5%;right:10px;z-index:1;display:flex;background: rgba(0, 0, 0, 0.5);max-width:30%;overflow: hidden;max-height:30%;"
+        let infoP = document.createElement("p");
+        infoP.innerText = type + ": " + info;
+        infoP.style.color = "white";
+        overlay.appendChild(infoP)
+        container.appendChild(overlay);
+        setTimeout(
+        function(){
+            overlay.remove();
+        }, duration);
+    })
+
+    socket.on('show_player_info_client', (playerObj, duration)=>{
+        console.log("IN HERE")
+        console.log(playerObj)
+        let container = document.getElementById("container");
+        let overlay = document.createElement("div");
+        overlay.style = "position:absolute;top:5%;right:10px;z-index:1;display:flex;background: rgba(0, 0, 0, 0.5);flex-direction: column;"
+        for (const [key, value] of Object.entries(playerObj)) {
+            let itemP = document.createElement("p");
+            itemP.innerText = key + ": " + value;
+            itemP.style.color = "white";
+            overlay.appendChild(itemP);
+        }
+        container.appendChild(overlay);
+        setTimeout(
+        function(){
+            overlay.remove();
+        }, duration);
+    })
+
     socket.on('start_video_video_client', (path) => {
         console.log("STARTING VIDEO...")
         let videoBaseUrl = '/assets/videos/';
