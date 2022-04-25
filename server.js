@@ -449,7 +449,7 @@ async function getSportsDetailsLocal(sport){
 }
 
   async function getPlayerDetailsLocal (player){
-    
+    // strCutout
     return new Promise((resolve, reject) =>{theSportsDb.getPlayerDetails(encodeURI(player["name"])).then((details)=>{
       let tempPlayerArr = {
         "name": player["name"],
@@ -460,7 +460,8 @@ async function getSportsDetailsLocal(sport){
         "gender": details["strGender"],
         "position": details["strPosition"],
         "height": details["strHeight"],
-        "weight": details["strWeight"]
+        "weight": details["strWeight"],
+        "cutout": details["strCutout"]
       };
       resolve(tempPlayerArr)
     })})
@@ -551,8 +552,36 @@ async function getSportsDetailsLocal(sport){
   socket.on('pause_video', function(data){
 		io.to(data["room_id"]).emit('pause_video');
 	});
+  socket.on('change_volume', (volumeValue, room)=>{
+    console.log(volumeValue)
+    console.log(room)
+    io.to(room).emit('change_volume_client', volumeValue);
+  })
+  socket.on('change_fullscreen', (room)=>{
+    console.log("Fullscreen")
+    console.log(room)
+    io.to(room).emit('change_fullscreen_client');
+  })
+  socket.on('skip_to_start', (room) => {
+    // Maybe a callback if the video has not started yet?
+    let jsonFile = 'public_html/assets/videos/videos.json'
+    fs.readFile(jsonFile, 'utf8', function readFileCallback(err, videoData){
+      if (err){
+        console.log(err);
+      } else {
+        let videoObject = JSON.parse(videoData);
+        fs.readFile('resources/rooms.json', 'utf8', function readFileCallback(err, roomData){
+          if(videoData){
+            let obj = JSON.parse(roomData)
+            let filePath = obj[room].path;
+            io.to(room).emit('skip_to_start_client', videoObject[filePath]["start-time"])
+          }
+        })
+      }
+    })
+  })
 
-  socket.on('show_players_server', (duration, callback)=>{
+  socket.on('show_players_server', (duration, location, callback)=>{
     // videos.json (teams) -> by fileprefix -> by room obj
     let jsonFile = 'public_html/assets/videos/videos.json'
     fs.readFile(jsonFile, 'utf8', function readFileCallback(err, videoData){
@@ -566,7 +595,7 @@ async function getSportsDetailsLocal(sport){
             let room = [...socket.rooms].filter(item => item != socket.id)
             if(room.length > 0){
               let filePath = obj[room].path;
-              io.to(room).emit('show_players_client', videoObject[filePath].teams, duration)
+              io.to(room).emit('show_players_client', videoObject[filePath].teams, duration, location)
             }else{
               callback(true);
             }
@@ -579,7 +608,7 @@ async function getSportsDetailsLocal(sport){
 
   })
 
-  socket.on('show_player_info_hold', (name, callback)=>{
+  socket.on('show_player_info_hold', (name, location, callback)=>{
     // videos.json (teams) -> by fileprefix -> by room obj
     let jsonFile = 'public_html/assets/videos/videos.json'
     fs.readFile(jsonFile, 'utf8', function readFileCallback(err, videoData){
@@ -609,7 +638,7 @@ async function getSportsDetailsLocal(sport){
                 playerObj = playersArr.find(player => player.name == name);
               }
               console.log(playerObj);
-              io.to(room).emit('show_player_info_hold_client', playerObj, videoObject[filePath].sport)
+              io.to(room).emit('show_player_info_hold_client', playerObj, videoObject[filePath].sport, location)
             }else{
               callback(true);
             }
@@ -635,7 +664,7 @@ async function getSportsDetailsLocal(sport){
     
 })
 
-  socket.on('show_player_info', (name, duration, callback)=>{
+  socket.on('show_player_info', (name, duration, location, callback)=>{
     // videos.json (teams) -> by fileprefix -> by room obj
     let jsonFile = 'public_html/assets/videos/videos.json'
     fs.readFile(jsonFile, 'utf8', function readFileCallback(err, videoData){
@@ -665,7 +694,8 @@ async function getSportsDetailsLocal(sport){
                 playerObj = playersArr.find(player => player.name == name);
               }
               console.log(playerObj);
-              io.to(room).emit('show_player_info_client', playerObj, duration, videoObject[filePath].sport)
+              console.log(duration)
+              io.to(room).emit('show_player_info_client', playerObj, duration, videoObject[filePath].sport, location)
             }else{
               callback(true);
             }
@@ -675,7 +705,7 @@ async function getSportsDetailsLocal(sport){
     })
   })
 
-  socket.on('show_sport_info_hold', (type, matchIndex, callback)=>{
+  socket.on('show_sport_info_hold', (type, matchIndex, location, callback)=>{
     let jsonFile = 'public_html/assets/videos/videos.json'
     console.log("HOLDING TO CLIENT")
 
@@ -702,8 +732,8 @@ async function getSportsDetailsLocal(sport){
               }else{
                 infoObj = videoObject[filePath]["sport-info"][type];
               }
-              console.log("HOLDING TO CLIENT")
-                io.to(room).emit('show_sport_info_hold_client', infoObj, type);
+              console.log(location)
+                io.to(room).emit('show_sport_info_hold_client', infoObj, type, location);
             }else{
               callback(true);
             }
@@ -727,7 +757,7 @@ async function getSportsDetailsLocal(sport){
       
   })
 
-  socket.on('show_sport_info', (type, duration, matchIndex, callback)=>{
+  socket.on('show_sport_info', (type, duration, matchIndex, location, callback)=>{
     console.log("HIT IN HERE SPORT")
     console.log(type)
     console.log(matchIndex)
@@ -756,7 +786,7 @@ async function getSportsDetailsLocal(sport){
               }else{
                 infoObj = videoObject[filePath]["sport-info"][type];
               }
-                io.to(room).emit('show_sport_info_client', infoObj, type, duration);
+                io.to(room).emit('show_sport_info_client', infoObj, type, duration, location);
             }else{
               callback(true);
             }
@@ -869,7 +899,8 @@ function getNestedFileData(innerCallback){
                   "fileprefix": json["fileprefix"],
                   "date": json["date"],
                   "sport": json["sport"],
-                  "games": json["games"]
+                  "games": json["games"],
+                  "start-time": json["start-time"]
                 }
               }else{
                 tempData[file] = {
@@ -880,7 +911,8 @@ function getNestedFileData(innerCallback){
                 "hometeam": json["hometeam"],
                 "awayteam": json["awayteam"],
                 "date": json["firstbcastdate"],
-                "sport": json["sport"]
+                "sport": json["sport"],
+                "start-time": json["start-time"]
                 }
               }
               innerCallback(tempData, folderIndex == files.length - 1);
