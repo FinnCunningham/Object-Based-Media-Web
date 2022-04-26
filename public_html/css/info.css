@@ -2,7 +2,7 @@
 	position: relative;
 	width: 300px;
 	height: 315px;
-	background-image: url(https://selimdoyranli.com/cdn/fut-player-card/img/card_bg.png);
+	background-image: url("../assets/imgs/Card 1.png");
 	background-position: center center;
 	background-size: 100% 100%;
 	background-repeat: no-repeat;
@@ -45,6 +45,17 @@
 	display: block;
 	text-align: center;
 	font-size: 1.6rem;
+	text-transform: uppercase;
+	border-bottom: 2px solid rgba(233, 204, 116, 0.1);
+	padding-bottom: 0.3rem;
+	overflow: hidden;
+}
+
+.player-fullname{
+    width: 100%;
+	display: block;
+	text-align: center;
+	font-size: 1rem;
 	text-transform: uppercase;
 	border-bottom: 2px solid rgba(233, 204, 116, 0.1);
 	padding-bottom: 0.3rem;

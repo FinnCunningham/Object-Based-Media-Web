@@ -47,6 +47,39 @@
         h1{
             margin: 0;
         }
+        .waiting-div{
+            display: flex;
+            align-self: center;
+            flex-direction: column;
+            align-items: center;
+        }
+        .waiting-img-div{
+            background-image: url("../assets/imgs/Waiting TV.png");
+            background-position: center center;
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            width: 300px;
+            height: 300px;
+        }
+        .fullscreen-btn{
+            width: 50px;
+            height: 50px;
+            position: absolute;
+            bottom: 0;
+            right: 1px;
+            /* border: 1px solid black; */
+        }
+        .fullscreen-btn:before, .fullscreen-btn:after, .fullscreen-btn>:first-child:before, .fullscreen-btn>:first-child:after {
+            position:absolute;
+            width:20px; height: 20px;
+            border-color:balck; /* or whatever colour */
+            border-style:solid; /* or whatever style */
+            content: ' ';
+        }
+        .fullscreen-btn:before {top:0;left:0;border-width: 1px 0 0 1px}
+        .fullscreen-btn:after {top:0;right:0;border-width: 1px 1px 0 0}
+        .fullscreen-btn>:first-child:before {bottom:0;right:0;border-width: 0 1px 1px 0}
+        .fullscreen-btn>:first-child:after {bottom:0;left:0;border-width: 0 0 1px 1px}
             </style>
         <link rel="stylesheet" href="css/info.css">
 </head>
@@ -59,9 +92,13 @@
     </div>
     <div class="container" id="container">
         <div id="tv-content">
+            <div class="waiting-div">
+                <div class="waiting-img-div"></div>
+                <p id="video-info">Waiting for video...</p>
+            </div>
             
         </div>
-        <div style="width: 50px; height: 50px; position: absolute; bottom: 0; right: 1px; border: 1px solid black;" onclick="fullscreen()"></div>
+        <div class="fullscreen-btn" onclick="fullscreen()"><p></p></div>
         <!-- <div style="width: 50px; height: 50px; position: absolute; bottom: 100; right: 1px; border: 1px solid black;" onclick="setCurrentTime()"></div> -->
 
     </div>
@@ -88,12 +125,14 @@
         }
 
         const isFullScreen = () => {
-            return document.isFullScreen || document.msIsFullScreen || document.mozIsFullScreen || document.webkitIsFullScreen;
+            return document.fullscreen || document.msIsFullScreen || document.mozFullScreen || document.webkitIsFullScreen;
         }
 
         const fullscreen = () => {
             //custom fullscreen since the fullscreen api breaks overlay
+            console.log("CLICKED FULL")
             if (isFullScreen()){ 
+                console.log("IS FULL SCREEN")
                 cancel().call(document)
                 document.getElementById("tv-content").style = "width: 95vw;height: 92vh;margin: 0 auto;";
                 document.getElementById("room_id_div").style.display = "Block";
@@ -114,6 +153,6 @@
         //     document.getElementById("videoClip").currentTime = 35;
         // }
     </script>
-    <script src="js/tv_sockets.js"></script>
+    <script src="js/client_video_sockets.js"></script>
 
 </body>

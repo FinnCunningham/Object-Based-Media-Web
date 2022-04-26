@@ -7,8 +7,6 @@ var cors = require('cors');
 const fs = require('fs');
 const theSportsDb = require('./controlers/sportsDbController.js');
 const pandaScore = require('./controlers/pandaScoreController.js');
-const e = require('express');
-const { Console } = require('console');
 
 let finalJson = {};
 /**
@@ -84,12 +82,8 @@ io.on('connection', (socket) => {
                 let jsonFile = 'public_html/assets/videos/videos.json';
                 fs.readFile(jsonFile, 'utf8', function readFileCallback(err, data){
                   let jsonData = JSON.parse(data)
-                  console.log(jsonData)
-                  console.log("///////////////////")
-                  console.log(jsonData[obj[room].path])
                   callback(true, JSON.stringify(jsonData[obj[room].path]));
                 })
-                // callback(true);
               }else{
                   callback(false);
               } 
@@ -150,10 +144,7 @@ io.on('connection', (socket) => {
                       finalJson = {...finalJson, ...videoObj}; //data
                     }                    
                 }
-                console.log("EHEHHEHHEHHEHE")
                 if(folderMax){
-                  console.log("MAST MAX")
-                  console.log("MX+=========================================")
                   returnDataAllSources(filesToUpdate, finalJson).then((theSportsDbData)=>{
                     Promise.all(theSportsDbData[0])
                     .then((neededData)=>{                      
@@ -198,8 +189,6 @@ io.on('connection', (socket) => {
                                  {id: matchData[0].opponents[1].opponent.id}]
                               })
                               //Get the two teams data.
-                              // console.log(matchData[0].opponents[1].opponent.id)
-                              // console.log("-----------------------------")
                               teamsPromise.push(getTeamData(matchData[0].opponents[0].opponent.id))
                               teamsPromise.push(getTeamData(matchData[0].opponents[1].opponent.id))
                           });
@@ -238,7 +227,6 @@ io.on('connection', (socket) => {
                             });
                             finalJson = {...finalJson, ...newEsportsData}
 
-                            console.log("==================")
                             jsonFile = 'public_html/assets/videos/videos.json'
                             fs.stat(jsonFile, (err, stat) => {
                               if(err){
@@ -255,9 +243,6 @@ io.on('connection', (socket) => {
                                     }catch{
                                       newJson = JSON.stringify(finalJson);           
                                     }
-                                    console.log("=============")
-                                    console.log(finalJson)
-                                    console.log("===========")
                                     fs.writeFile(jsonFile, newJson, 'utf8', ()=>{console.log("WRITTEN TO VIDEO JSON FILE");}); // write it back 
                                   }
                                 });
@@ -280,192 +265,7 @@ io.on('connection', (socket) => {
       })
   })
 
-async function returnDataAllSources(filesToUpdate, fileJson){
-  let newData = {...fileJson}; //fileJson
-  return new Promise((resolve, reject)=>{
-    let allIdsPromise = [];
-    let allEsportsPromise = [];
-    let allSportsPromise = [];
-    console.log("IN HERE")
-    filesToUpdate.forEach(fileToUpdate => {
-      if(fileToUpdate[1].sport == 'Football' || fileToUpdate[1].sport == 'Rugby'){
-        allSportsPromise.push([fileToUpdate[0], fileToUpdate[1]]);
-      }else if(fileToUpdate[1].sport == 'Esport'){
-        console.log("HIT ESPORTS")
-        allEsportsPromise.push([fileToUpdate[0], fileToUpdate[1]])
-      }
-    });
-    resolve([allSportsPromise, allEsportsPromise, newData]);
-  })
-}
 
-async function getAllEsportsData(games, newData){
-  return new Promise((resolve, reject)=>{
-    console.log("£IN ESPOERSTS HW AJDG JAWG HWJ HWG HGH JWG HA J")
-    console.log(games)
-    console.log(newData)
-    let range = newData.date + "T12:00:00Z," +  newData.date + "T22:00:00Z";
-    console.log(range)
-    pandaScore.getGameData(range, games[0] + " vs " + games[1], 'ul5RBe3fXjrzQYaWwZFXg7hv_ACaKq1kTrK7hI7KlmLIm7KYTsc')
-    .then((data)=>{
-      console.log("?>?>?>>>>>.//.././......")
-      console.log(data)
-      resolve(data)
-    })
-  })
-}
-
-async function getTeamData(teamId){
-  return new Promise((resolve, reject)=>{
-    pandaScore.getTeamData(teamId, "ul5RBe3fXjrzQYaWwZFXg7hv_ACaKq1kTrK7hI7KlmLIm7KYTsc")
-    .then((data)=>{
-      resolve(data)
-    })
-  })
-}
-
-async function returnAllSportsDbData(allIdsPromise, newData){
-  return new Promise((resolve, reject)=>{
-
-    Promise.all(allIdsPromise)
-    .then((finalIdsData)=>{
-      let teamsPromise = []
-      finalIdsData.forEach((idObj) =>{
-        teamsPromise.push(getAllPlayersDataLocal(idObj[0], idObj[1]));
-      })
-      let playersPromise = [];
-      let fileprefixs = [];
-      let sportsInfoPromise = [];
-      let sportsInfoFixprefixs = [];
-      Promise.all(teamsPromise)
-      .then((sportsDBDatas)=>{
-        sportsDBDatas.forEach(sportsDBData => {
-            if(newData[sportsDBData.fileprefix]){
-              if(!newData[sportsDBData.fileprefix]["teams"]){
-                console.log("Team needed")
-                newData[sportsDBData.fileprefix]["teams"] = sportsDBData.teams;
-                if(newData[sportsDBData.fileprefix]["teams"][0].length > 0){
-                  fileprefixs.push(sportsDBData.fileprefix)  
-                }
-                newData[sportsDBData.fileprefix]["teams"][0].forEach((player) => {
-                  
-                  playersPromise.push(getPlayerDetailsLocal(player));
-                });
-                newData[sportsDBData.fileprefix]["teams"][1].forEach((player) => {
-                  playersPromise.push(getPlayerDetailsLocal(player));
-                });
-                  console.log("????????????????????")
-                  console.log("THREE")
-                  console.log("????????????????????")
-              }else{
-                // Maybe set it to the file teams if needed?
-              }
-              
-              if(!newData[sportsDBData.fileprefix]["sport-info"]){
-                console.log("IN GERE")
-                let sport = newData[sportsDBData.fileprefix].sport;
-                if(sport == 'Football'){
-                  sport = "Soccer";
-                }
-                // console.log(sport)
-                sportsInfoPromise.push(getSportsDetailsLocal(sport));
-                sportsInfoFixprefixs.push(sportsDBData.fileprefix);
-                // newData[sportsDBData.fileprefix] = 
-                // console.log(tempObj)
-              }
-            }else{
-              // getSportInfo
-            }      
-        });
-        Promise.all(playersPromise)
-
-        .then((finalPlayersData) => {
-          let tempTeamIndex = 0;
-          let fileTeams = []
-          let fileIndex = 0;
-          for (let i = 0; i < finalPlayersData.length / 11; i++) {
-            fileTeams.push(finalPlayersData.slice(i*11,i*11+11))
-            console.log("IN HERE THREEEEEEE:     " + i)
-            
-          } 
-          console.log("????????????????????")
-            // console.log(fileTeams)
-            console.log("????????????????????")
-          // let gameIndex = 0;
-          fileTeams.forEach((finalTeam, finalTeamIndex) => {
-            let tempIndex = 0;
-            finalTeam.forEach((finalPlayer, finalPlayerIndex)=>{
-              newData[fileprefixs[Math.floor((finalTeamIndex/2))]]["teams"][tempTeamIndex][tempIndex] = finalPlayer; 
-              tempIndex++;
-              console.log("INSIDE FOR")
-            })
-            if(tempTeamIndex + 1 == 2){
-              tempTeamIndex = 0;
-            }else{
-              tempTeamIndex++;
-            }    
-          });
-          Promise.all(sportsInfoPromise)
-          .then((sportsData) => {
-            sportsData.forEach((sportData, sportDataIndex) => {
-              let finalSportData = [];
-                finalSportData = {
-                  "name": sportData[0]["strSport"],
-                  "Description": sportData[0]["strSportDescription"],
-                  "icon": sportData[0]["strSportIconGreen"]
-                }
-              newData[sportsInfoFixprefixs[sportDataIndex]]["sport-info"] = finalSportData;
-            });
-            // End of check.
-            resolve(newData)
-          })
-        })        
-      }) 
-    })
-  })
-}
-
-async function getAllFileTeamIdsLocal(homeTeamName, tempObj){
-  return new Promise((resolve, rejet)=>{
-    theSportsDb.getsportDBEvent(homeTeamName, tempObj.date).then((id)=>{
-      resolve([id, tempObj.fileprefix])
-    })
-  })
-}
-
-async function getAllPlayersDataLocal(id, fileprefix){
-  return new Promise((resolve, rejet)=>{
-    theSportsDb.getPlayers(id, fileprefix).then((sportsDBData)=>{
-      resolve(sportsDBData)
-    })
-  })
-}
-
-async function getSportsDetailsLocal(sport){
-  return new Promise((resolve, reject) =>{
-    theSportsDb.getSportInfo(sport).then((details)=>{  
-    resolve(details)
-  })})
-}
-
-  async function getPlayerDetailsLocal (player){
-    // strCutout
-    return new Promise((resolve, reject) =>{theSportsDb.getPlayerDetails(encodeURI(player["name"])).then((details)=>{
-      let tempPlayerArr = {
-        "name": player["name"],
-        "nationality": details["strNationality"],
-        "birthDate": details["dateBorn"],
-        "signingCost": details["strSigning"],
-        "birthLocation": details["strBirthLocation"],
-        "gender": details["strGender"],
-        "position": details["strPosition"],
-        "height": details["strHeight"],
-        "weight": details["strWeight"],
-        "cutout": details["strCutout"]
-      };
-      resolve(tempPlayerArr)
-    })})
-  }
 
   socket.on('return_videos', (callback) => {
     let jsonFile = 'public_html/assets/videos/videos.json';
@@ -476,13 +276,10 @@ async function getSportsDetailsLocal(sport){
 
   socket.on('room_join', (room) => {
     socket.join(room);
-    console.log("JOINING: " + room)
-    console.log(io.sockets.adapter.rooms);
     io.to(socket.id).emit("room_joined", room);
   })
 
   socket.on('set_video', (fileprefix) => {
-    console.log(fileprefix);
     fs.stat('resources/rooms.json', (err, stat) => {
       if(err == null){
         fs.readFile('resources/rooms.json', 'utf8', function readFileCallback(err, data){
@@ -498,10 +295,7 @@ async function getSportsDetailsLocal(sport){
             let newJson = {...roomObj, ...{[room]: {path: fileprefix}}}
             newJson = JSON.stringify(newJson);
             fs.writeFile('resources/rooms.json', newJson, 'utf8', ()=>{console.log("WRITTEN TO VIDEO JSON FILE")}); // write it back 
-            console.log("SET VIDEO CLIENT")
-            console.log(room)
             io.to(room).emit('set_video_video_client', fileprefix)
-            // SEND TO CLINENT TO START THE VIDEO
           }
         });
       }else{
@@ -517,16 +311,13 @@ async function getSportsDetailsLocal(sport){
   });
 
   socket.on('start_video', function(clientData, callback){
-		console.log('Starting Video');
     fs.readFile('resources/rooms.json', 'utf8', function readFileCallback(err, data){
       if(data){
         let obj = JSON.parse(data)
         let room = [...socket.rooms].filter(item => item != socket.id)
-        console.log(room)
         if(room.length > 0){
           let filePath = obj[room].path;
           io.to(clientData["room_id"]).emit('start_video_video_client', filePath);
-          console.log(clientData["room_id"])
           callback(false)
         }else{
           callback(true)
@@ -538,7 +329,6 @@ async function getSportsDetailsLocal(sport){
   socket.on('secondary_device_connected', function(){
 		console.log('Secondary device connected');
     let rooms = getActiveRooms(io)
-    console.log(rooms)
     let rooms_clients = [];
     rooms.forEach(room => {
       rooms_clients.push(io.sockets.adapter.rooms.get(room).size - 1)
@@ -546,20 +336,15 @@ async function getSportsDetailsLocal(sport){
 		io.emit('secondary_device_connected', {"rooms": rooms, "rooms_clients": rooms_clients});
 	});
   socket.on('play_video', function(data){
-		console.log('play clip');
 		io.to(data["room_id"]).emit('play_video');
 	});
   socket.on('pause_video', function(data){
 		io.to(data["room_id"]).emit('pause_video');
 	});
   socket.on('change_volume', (volumeValue, room)=>{
-    console.log(volumeValue)
-    console.log(room)
     io.to(room).emit('change_volume_client', volumeValue);
   })
   socket.on('change_fullscreen', (room)=>{
-    console.log("Fullscreen")
-    console.log(room)
     io.to(room).emit('change_fullscreen_client');
   })
   socket.on('skip_to_start', (room) => {
@@ -582,7 +367,6 @@ async function getSportsDetailsLocal(sport){
   })
 
   socket.on('show_players_server', (duration, location, callback)=>{
-    // videos.json (teams) -> by fileprefix -> by room obj
     let jsonFile = 'public_html/assets/videos/videos.json'
     fs.readFile(jsonFile, 'utf8', function readFileCallback(err, videoData){
       if (err){
@@ -604,12 +388,9 @@ async function getSportsDetailsLocal(sport){
         })
       }
     })
-    // console.log(team)
-
   })
 
   socket.on('show_player_info_hold', (name, location, callback)=>{
-    // videos.json (teams) -> by fileprefix -> by room obj
     let jsonFile = 'public_html/assets/videos/videos.json'
     fs.readFile(jsonFile, 'utf8', function readFileCallback(err, videoData){
       if (err){
@@ -637,7 +418,7 @@ async function getSportsDetailsLocal(sport){
                 playersArr = [...videoObject[filePath].teams[0], ...videoObject[filePath].teams[1]];
                 playerObj = playersArr.find(player => player.name == name);
               }
-              console.log(playerObj);
+              console.log(playerObj)
               io.to(room).emit('show_player_info_hold_client', playerObj, videoObject[filePath].sport, location)
             }else{
               callback(true);
@@ -649,9 +430,7 @@ async function getSportsDetailsLocal(sport){
   })
 
   socket.on('stop_show_player_info_hold', (callback)=>{
-    console.log("STOP")
     fs.readFile('resources/rooms.json', 'utf8', function readFileCallback(err, roomData){
-      
       let obj = JSON.parse(roomData)
       let room = [...socket.rooms].filter(item => item != socket.id)
       if(room.length > 0){
@@ -665,7 +444,6 @@ async function getSportsDetailsLocal(sport){
 })
 
   socket.on('show_player_info', (name, duration, location, callback)=>{
-    // videos.json (teams) -> by fileprefix -> by room obj
     let jsonFile = 'public_html/assets/videos/videos.json'
     fs.readFile(jsonFile, 'utf8', function readFileCallback(err, videoData){
       if (err){
@@ -693,8 +471,6 @@ async function getSportsDetailsLocal(sport){
                 playersArr = [...videoObject[filePath].teams[0], ...videoObject[filePath].teams[1]];
                 playerObj = playersArr.find(player => player.name == name);
               }
-              console.log(playerObj);
-              console.log(duration)
               io.to(room).emit('show_player_info_client', playerObj, duration, videoObject[filePath].sport, location)
             }else{
               callback(true);
@@ -707,8 +483,6 @@ async function getSportsDetailsLocal(sport){
 
   socket.on('show_sport_info_hold', (type, matchIndex, location, callback)=>{
     let jsonFile = 'public_html/assets/videos/videos.json'
-    console.log("HOLDING TO CLIENT")
-
     fs.readFile(jsonFile, 'utf8', function readFileCallback(err, videoData){
       if (err){
         console.log(err);
@@ -732,8 +506,7 @@ async function getSportsDetailsLocal(sport){
               }else{
                 infoObj = videoObject[filePath]["sport-info"][type];
               }
-              console.log(location)
-                io.to(room).emit('show_sport_info_hold_client', infoObj, type, location);
+              io.to(room).emit('show_sport_info_hold_client', infoObj, type, location);
             }else{
               callback(true);
             }
@@ -758,9 +531,6 @@ async function getSportsDetailsLocal(sport){
   })
 
   socket.on('show_sport_info', (type, duration, matchIndex, location, callback)=>{
-    console.log("HIT IN HERE SPORT")
-    console.log(type)
-    console.log(matchIndex)
     let jsonFile = 'public_html/assets/videos/videos.json'
     fs.readFile(jsonFile, 'utf8', function readFileCallback(err, videoData){
       if (err){
@@ -775,8 +545,6 @@ async function getSportsDetailsLocal(sport){
               let filePath = obj[room].path;
               let infoObj = {};
               if(videoObject[filePath].sport == 'Esport'){
-                //NESTED
-                
                 if(type == 'prizepool'){
                   infoObj = videoObject[filePath].matches[matchIndex].tournament[type]
                 }
@@ -857,9 +625,7 @@ async function getSportsDetailsLocal(sport){
 
   })
   socket.on('disconnect' , function(){
-  
     console.log("USER DISCONNECTED: " + socket.id)
-    console.log("ROOM: " + socket.rooms.size )
   });
 });
 
@@ -879,6 +645,167 @@ const getDirectories = (source, callback, directoryNeeded) => {
     }
   })
 }
+
+async function returnDataAllSources(filesToUpdate, fileJson){
+  let newData = {...fileJson}; //fileJson
+  return new Promise((resolve, reject)=>{
+    let allEsportsPromise = [];
+    let allSportsPromise = [];
+    filesToUpdate.forEach(fileToUpdate => {
+      if(fileToUpdate[1].sport == 'Football' || fileToUpdate[1].sport == 'Rugby'){
+        allSportsPromise.push([fileToUpdate[0], fileToUpdate[1]]);
+      }else if(fileToUpdate[1].sport == 'Esport'){
+        allEsportsPromise.push([fileToUpdate[0], fileToUpdate[1]])
+      }
+    });
+    resolve([allSportsPromise, allEsportsPromise, newData]);
+  })
+}
+
+async function getAllEsportsData(games, newData){
+  return new Promise((resolve, reject)=>{
+    let range = newData.date + "T12:00:00Z," +  newData.date + "T22:00:00Z";
+    pandaScore.getGameData(range, games[0] + " vs " + games[1], 'ul5RBe3fXjrzQYaWwZFXg7hv_ACaKq1kTrK7hI7KlmLIm7KYTsc')
+    .then((data)=>{
+      resolve(data)
+    })
+  })
+}
+
+async function getTeamData(teamId){
+  return new Promise((resolve, reject)=>{
+    pandaScore.getTeamData(teamId, "ul5RBe3fXjrzQYaWwZFXg7hv_ACaKq1kTrK7hI7KlmLIm7KYTsc")
+    .then((data)=>{
+      resolve(data)
+    })
+  })
+}
+
+async function returnAllSportsDbData(allIdsPromise, newData){
+  return new Promise((resolve, reject)=>{
+
+    Promise.all(allIdsPromise)
+    .then((finalIdsData)=>{
+      let teamsPromise = []
+      finalIdsData.forEach((idObj) =>{
+        teamsPromise.push(getAllPlayersDataLocal(idObj[0], idObj[1]));
+      })
+      let playersPromise = [];
+      let fileprefixs = [];
+      let sportsInfoPromise = [];
+      let sportsInfoFixprefixs = [];
+      Promise.all(teamsPromise)
+      .then((sportsDBDatas)=>{
+        sportsDBDatas.forEach(sportsDBData => {
+            if(newData[sportsDBData.fileprefix]){
+              if(!newData[sportsDBData.fileprefix]["teams"]){
+                newData[sportsDBData.fileprefix]["teams"] = sportsDBData.teams;
+                if(newData[sportsDBData.fileprefix]["teams"][0].length > 0){
+                  fileprefixs.push(sportsDBData.fileprefix)  
+                }
+                newData[sportsDBData.fileprefix]["teams"][0].forEach((player) => {
+                  playersPromise.push(getPlayerDetailsLocal(player));
+                });
+                newData[sportsDBData.fileprefix]["teams"][1].forEach((player) => {
+                  playersPromise.push(getPlayerDetailsLocal(player));
+                });
+              }else{
+                // Maybe set it to the file teams if needed?
+              }
+              
+              if(!newData[sportsDBData.fileprefix]["sport-info"]){
+                let sport = newData[sportsDBData.fileprefix].sport;
+                if(sport == 'Football'){
+                  sport = "Soccer";
+                }
+                sportsInfoPromise.push(getSportsDetailsLocal(sport));
+                sportsInfoFixprefixs.push(sportsDBData.fileprefix);
+              }
+            }else{
+              // getSportInfo
+            }      
+        });
+        Promise.all(playersPromise)
+
+        .then((finalPlayersData) => {
+          let tempTeamIndex = 0;
+          let fileTeams = []
+          for (let i = 0; i < finalPlayersData.length / 11; i++) {
+            fileTeams.push(finalPlayersData.slice(i*11,i*11+11))
+            
+          } 
+          fileTeams.forEach((finalTeam, finalTeamIndex) => {
+            let tempIndex = 0;
+            finalTeam.forEach((finalPlayer, finalPlayerIndex)=>{
+              newData[fileprefixs[Math.floor((finalTeamIndex/2))]]["teams"][tempTeamIndex][tempIndex] = finalPlayer; 
+              tempIndex++;
+            })
+            if(tempTeamIndex + 1 == 2){
+              tempTeamIndex = 0;
+            }else{
+              tempTeamIndex++;
+            }    
+          });
+          Promise.all(sportsInfoPromise)
+          .then((sportsData) => {
+            sportsData.forEach((sportData, sportDataIndex) => {
+              let finalSportData = [];
+                finalSportData = {
+                  "name": sportData[0]["strSport"],
+                  "Description": sportData[0]["strSportDescription"],
+                  "icon": sportData[0]["strSportIconGreen"]
+                }
+              newData[sportsInfoFixprefixs[sportDataIndex]]["sport-info"] = finalSportData;
+            });
+            // End of check.
+            resolve(newData)
+          })
+        })        
+      }) 
+    })
+  })
+}
+
+async function getAllFileTeamIdsLocal(homeTeamName, tempObj){
+  return new Promise((resolve, rejet)=>{
+    theSportsDb.getsportDBEvent(homeTeamName, tempObj.date).then((id)=>{
+      resolve([id, tempObj.fileprefix])
+    })
+  })
+}
+
+async function getAllPlayersDataLocal(id, fileprefix){
+  return new Promise((resolve, rejet)=>{
+    theSportsDb.getPlayers(id, fileprefix).then((sportsDBData)=>{
+      resolve(sportsDBData)
+    })
+  })
+}
+
+async function getSportsDetailsLocal(sport){
+  return new Promise((resolve, reject) =>{
+    theSportsDb.getSportInfo(sport).then((details)=>{  
+    resolve(details)
+  })})
+}
+
+  async function getPlayerDetailsLocal (player){
+    return new Promise((resolve, reject) =>{theSportsDb.getPlayerDetails(encodeURI(player["name"])).then((details)=>{
+      let tempPlayerArr = {
+        "name": player["name"],
+        "nationality": details["strNationality"],
+        "birthDate": details["dateBorn"],
+        "signingCost": details["strSigning"],
+        "birthLocation": details["strBirthLocation"],
+        "gender": details["strGender"],
+        "position": details["strPosition"],
+        "height": details["strHeight"],
+        "weight": details["strWeight"],
+        "cutout": details["strCutout"]
+      };
+      resolve(tempPlayerArr)
+    })})
+  }
 
 function getNestedFileData(innerCallback){
   let baseURL = 'public_html/assets/videos/';
