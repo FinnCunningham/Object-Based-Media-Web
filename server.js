@@ -288,7 +288,7 @@ io.on('connection', (socket) => {
           } else {
             let roomObj = {}
             if(data){
-              roomObj = JSON.parse(data); //now it an object
+              roomObj = JSON.parse(data); //now it's an object
     
             }
             let room = [...socket.rooms].filter(item => item != socket.id);

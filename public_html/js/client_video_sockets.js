@@ -87,7 +87,7 @@ $(function () {
         setTimeout(
         function(){
             overlay.remove();
-        }, 1000000); //duration
+        }, duration); //duration
     })
 
     socket.on('show_player_info_hold_client', (playerObj, sport, location)=>{

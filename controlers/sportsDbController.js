@@ -1,16 +1,5 @@
 const axios = require('axios'); 
 const cheerio = require('cheerio'); 
-const https = require('https');
-
-
-// getsportDBEvent("Southampton", "2022-03-20")
-// .then((id)=>{
-//   console.log(id)
-// })
-//  1514444
-
-// All Sports Info
-// https://www.thesportsdb.com/api/v1/json/2/all_sports.php
 
 const getSportInfo = (sport) => 
   axios.get('https://www.thesportsdb.com/api/v1/json/2/all_sports.php')
@@ -19,7 +8,6 @@ const getSportInfo = (sport) =>
     let data = response.data["sports"].filter(sportObj => sportObj.strSport == sport)
     return data
   })
-
 
 const getsportDBEvent = (hometeam, date) => axios.get('https://www.thesportsdb.com/api/v1/json/2/searchevents.php?e=' + hometeam + '&d=' + date)
 .then((response)=>{

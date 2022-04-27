@@ -73,8 +73,11 @@
 }
 
 .player-features-col{
-    border-right: 2px solid rgba(233, 204, 116, 0.1);
 	padding: 0 2.3rem;
+}
+
+.player-features-col:first-child{
+    border-right: 2px solid rgba(233, 204, 116, 0.1);
 }
 
 .player-feature-value{
