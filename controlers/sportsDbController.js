@@ -4,7 +4,6 @@ const cheerio = require('cheerio');
 const getSportInfo = (sport) => 
   axios.get('https://www.thesportsdb.com/api/v1/json/2/all_sports.php')
   .then((response)=>{
-    // console.log(response.data)
     let data = response.data["sports"].filter(sportObj => sportObj.strSport == sport)
     return data
   })
