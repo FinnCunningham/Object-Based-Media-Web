@@ -1,3 +1,7 @@
+/**
+ * @file Main file that contains the backend server code.
+ * @author Finn Cunningham
+ */
 const express = require("express");
 const app = express();
 const http = require("http");
@@ -12,11 +16,6 @@ const retrieveSportsData = require("./controlers/retrieveSportsData.js");
 const retrieveEsportsData = require("./controlers/retrieveEsportsData.js");
 
 let finalJson = {};
-/**
- * TODO:
- *  -tidy up code
- *  -remove path when the room is closed.
- */
 
 const io = new Server(server, {
   path: "/socket.io",
@@ -41,9 +40,6 @@ app.get("/", (req, res) => {
  * @returns {void} - Nothing is returned from this method 
  */
 io.on("connection", (socket) => {
-  console.log("a user connected from ");
-  console.log(io.sockets.adapter.rooms);
-
   /**
    * Communication event listener on when a socket creates a room
    * @param {String} room - Name of the room the socket is trying to create
@@ -52,34 +48,27 @@ io.on("connection", (socket) => {
   socket.on("create_room", (room) => {
     let rooms = getActiveRooms(io);
     if (rooms.includes(room)) {
-      console.log(io.sockets.adapter.rooms);
       io.to(socket.id).emit("room_unavailable");
     } else {
-      fs.readFile(
-        "resources/rooms.json",
-        "utf8",
+      fs.readFile("resources/rooms.json", "utf8",
         function readFileCallback(err, data) {
           if (err) {
             console.log(err);
           } else {
             let obj = {};
-            if (data) {
-              obj = JSON.parse(data); //now it an object
-            }
+            if (data) { obj = JSON.parse(data); }
             let tempObj = {};
             tempObj[room] = { path: "" };
             let newJson = { ...obj, ...{ [room]: { path: "" } } };
-            newJson = JSON.stringify(newJson); //convert it back to json
+            newJson = JSON.stringify(newJson);
             fs.writeFile("resources/rooms.json", newJson, "utf8", () => {
               console.log("WRITTEN TO VIDEO JSON FILE");
-            }); // write it back
+            });
           }
         }
       );
-
       socket.join(room);
       io.to(socket.id).emit("room_joined", room);
-      console.log("JOINED ROOM " + room);
     }
   });
   /**

@@ -1,4 +1,9 @@
 let textShadow = "text-shadow:0.05em 0 black,0 0.05em black,-0.05em 0 black,0 -0.05em black,-0.05em -0.05em black,-0.05em 0.05em black,0.05em -0.05em black,0.05em 0.05em black;"
+/**
+ * Changes string location to location in css
+ * @param {String} locationPoint - where the location is set (Top Right, Top Left, etc) 
+ * @returns {String} - string location -> css location
+ */
 const setLocation = (locationPoint) => {
     let tempLocation = "top:6px;right:4px;";
     if(locationPoint == "Top Right"){
@@ -14,7 +19,13 @@ const setLocation = (locationPoint) => {
 }
 
 let overlayStyle = "position:absolute;z-index:1;display:flex;overflow: hidden;flex-direction:column;";
+/**
+ * On load function
+ */
 $(function () {
+    /**
+     * On communication connect function
+     */
     socket.on('connect', () => {
         if(!localStorage.getItem("room_id") || localStorage.getItem("room_id") == undefined){
             document.getElementById("room_div").style.display = "block";
@@ -24,10 +35,18 @@ $(function () {
             socket.emit("room_join", localStorage.getItem("room_id"));
         }
     })
+  /**
+   * Communication event listener which shows the sport info
+   * @param {String} info - Info that will be displayed
+   * @param {String} type - Type of info that will be displayed
+   * @param {String} duration - Length of time that the info will be displayed
+   * @param {String} location - Name of location where the info will be shown 
+   * @returns {void} - Nothing is returned from this method 
+   */
     socket.on('show_sport_info_client', (info, type, duration, location)=>{
         let container = document.getElementById("container");
         let overlay = document.createElement("div");
-        overlay.style = overlayStyle + setLocation(location) + "max-height:40%;max-width: 400px";
+        overlay.style = overlayStyle + setLocation(location) + "max-height:40%;max-width: 400px;background:rgba(0, 0, 0, 0.5);";
         let infoP; 
         if(type == 'icon'){
             infoP = document.createElement("img");
@@ -45,13 +64,18 @@ $(function () {
         }, duration);
     })
 
+    /**
+     * Communication event listener which shows the sport info while the user holds the button
+     * @param {String} info - Info that will be displayed
+     * @param {String} type - Type of info that will be displayed
+     * @param {String} location - Name of location where the info will be shown 
+     * @returns {void} - Nothing is returned from this method 
+     */
     socket.on('show_sport_info_hold_client', (info, type, location)=>{
         let container = document.getElementById("container");
         let overlay = document.createElement("div");
         overlay.id = "overlay-div"
-        // let locationString = setLocation(location)
-        // console.log( );
-        overlay.style = overlayStyle + setLocation(location) + "max-height:40%;max-width: 500px";
+        overlay.style = overlayStyle + setLocation(location) + "max-height:40%;max-width: 500px;background:rgba(0, 0, 0, 0.5);";
         let infoP; 
         if(type == 'icon'){
             infoP = document.createElement("img");
@@ -69,11 +93,21 @@ $(function () {
                 scrollSmoothlyToBottom("overlay-div");
             }, 2000); //duration
     })
-
+    /**
+     * Communication event listener which destroys the information being shown when the user lets go
+     */
     socket.on('stop_show_sport_info_hold_client', ()=>{
        document.getElementById("overlay-div").remove();
     })
 
+    /**
+     * Communication event listener which shows the player info
+     * @param {String} playerObj - Object that contains the players information
+     * @param {String} duration - Length of time that the info will be displayed
+     * @param {String} sport - Name of sport of the information being displayed 
+     * @param {String} location - Name of location where the info will be shown 
+     * @returns {void} - Nothing is returned from this method 
+     */
     socket.on('show_player_info_client', (playerObj, duration, sport, location)=>{
         console.log("IN HERE")
         console.log(playerObj)
@@ -90,6 +124,13 @@ $(function () {
         }, duration); //duration
     })
 
+    /**
+     * Communication event listener which shows the player info while the user holds the button
+     * @param {Object} playerObj - Object that contains the players information
+     * @param {String} sport - Name of sport of the information being displayed 
+     * @param {String} location - Name of location where the info will be shown 
+     * @returns {void} - Nothing is returned from this method 
+     */
     socket.on('show_player_info_hold_client', (playerObj, sport, location)=>{
         let container = document.getElementById("container");
         let overlay = document.createElement("div");
@@ -101,10 +142,18 @@ $(function () {
         container.appendChild(overlay);
     })
 
+    /**
+     * Communication event listener which destroys the information being shown when the user lets go
+     */
     socket.on('stop_show_player_info_hold_client', ()=>{
         document.getElementById("overlay-div").remove();
     })
 
+    /**
+     * Communication event listener which creates a video element and sets it to the video chosen by the room (Done by the user changing the video)
+     * @param {String} path - Path of the video that is being set up
+     * @returns {void} - Nothing is returned from this method 
+     */
     socket.on('set_video_video_client', (path) => {
         console.log(" CHANGED ... STARTING VIDEO...")
         let videoBaseUrl = '/assets/videos/';
@@ -116,6 +165,11 @@ $(function () {
         }
     })
 
+    /**
+     * Communication event listener which creates a video element and sets it to the video chosen by the room (Done by the user starting the video)
+     * @param {String} path - Path of the video that is being set up
+     * @returns {void} - Nothing is returned from this method 
+     */
     socket.on('start_video_video_client', (path) => {
         console.log("STARTING VIDEO...")
         let videoBaseUrl = '/assets/videos/';
@@ -126,32 +180,58 @@ $(function () {
             document.getElementById("videoClip").style = "width:100%;";
         }
     })
-    
-    socket.on('play_video', function(msg){
+    /**
+     * Communication event listener which plays the video
+     * @returns {void} - Nothing is returned from this method 
+     */
+    socket.on('play_video', function(){
         console.log("BACK" + socket.id)
         console.log("Start Clip");
         document.getElementById("videoClip").play();
     });
 
+    /**
+     * Communication event listener which pauses the video
+     * @returns {void} - Nothing is returned from this method 
+     */
     socket.on('pause_video', () => {
         document.getElementById("videoClip").pause();
     })
 
+
+    /**
+     * Communication event listener which changes the volume the video
+     * @param {String} - value that the volume is being changed to
+     * @returns {void} - Nothing is returned from this method 
+     */
     socket.on('change_volume_client', (value)=>{
         if(document.getElementById('videoClip')){
             document.getElementById('videoClip').volume = value;
         }
     })
 
+    /**
+     * Communication event listener which changes the fullscreen state of the video
+     * @returns {void} - Nothing is returned from this method 
+     */
     socket.on('change_fullscreen_client', ()=>{
         console.log("yo")
         fullscreen();
     })
 
+    /**
+     * Communication event listener which skips to the start of the video
+     * @param {String} time - data set in the local storage of the start of the video
+     * @returns {void} - Nothing is returned from this method 
+     */
     socket.on('skip_to_start_client', (time)=>{
         document.getElementById("videoClip").currentTime = time;
     })
 
+    /**
+     * Communication event listener which returns that the room is unavailable
+     * @returns {void} - Nothing is returned from this method 
+     */
     socket.on('room_unavailable', () => {
         console.log("unavailable");
         console.log("Create a different room, Room already created");
@@ -159,6 +239,10 @@ $(function () {
         localStorage.removeItem("room_id");
     })
 
+    /**
+     * Communication event listener which sets the user to a room joined state
+     * @returns {void} - Nothing is returned from this method 
+     */
     socket.on('room_joined', (room) => {
         console.log(room);
         document.getElementById("room_div").style.display = "None";
@@ -166,12 +250,23 @@ $(function () {
         document.getElementById("room_id_p").innerText = room;
     })
 
+    /**
+     * Browser event listener that runs before the user refreshes to make sure that the socket is disconnected properly 
+     * @returns {void} - Nothing is returned from this method 
+     */
     window.addEventListener("beforeunload", function(event) {
         socket.disconnect();
         event.returnValue = null;
       });
 });
 
+/**
+ * Sets what data is displayed for the players information
+ * @param {String} overlay - overlay element
+ * @param {Object} playerObj - Object containing information on the player
+ * @param {String} sport - Type of sport the information is from
+ * @returns {Element} - Overlay element is returned 
+ */
 const show_player_info = (overlay, playerObj, sport) => {
     let esportsElements = {};
     let sportsElements = {};
@@ -379,6 +474,12 @@ const show_player_info = (overlay, playerObj, sport) => {
     return overlay;
 }
 
+/**
+ * Helper function that sets the players information within the feature span
+ * @param {Element} valueElement - The element that contains the value
+ * @param {String} labelText - Text about the type of information
+ * @returns {void} - Nothing is returned from this method 
+ */
 const setPlayerFeatureSpan = ( valueElement, labelText) => {
     let playerFeatureSpanElement = document.createElement("span");
     playerFeatureSpanElement.style = "display: flex;font-size: 1rem;text-transform: uppercase;";
@@ -392,6 +493,12 @@ const setPlayerFeatureSpan = ( valueElement, labelText) => {
     return playerFeatureSpanElement;
 }
 
+/**
+ * Helper function that sets the elements value with validation
+ * @param {Element} element - The element that is going to be changed
+ * @param {String} textValue - Value the element is being changed to
+ * @returns {Element} - Returns the new element 
+ */
 const setElement = (element, textValue) => {
     if(textValue == "" || !textValue || textValue == 0 || textValue == "0" || textValue == "£"){
         textValue = "N/A";
@@ -399,11 +506,20 @@ const setElement = (element, textValue) => {
     element.innerText = textValue;
     return element;
 }
-
+/**
+ * Helper function that checks if string contains a number
+ * @param {String} myString - String that will be checked
+ * @returns {Boolean} - True/False if contains number 
+ */
 function hasNumber(myString) {
     return /\d/.test(myString);
 }
 
+/**
+ * Function that slowly scrolls the element to the bottom (sport description)
+ * @param {String} ElementId - ID of the element being scrolled
+ * @returns {void} - Nothing is returned from this method 
+ */
 const scrollSmoothlyToBottom = (ElementId) => {
     const element = $(`#${ElementId}`);
     element.animate({
@@ -411,6 +527,11 @@ const scrollSmoothlyToBottom = (ElementId) => {
     }, 50000);
 }
 
+/**
+ * Helper function that gets the age of someone from their birthdate
+ * @param {String} dateString - Date of birth 
+ * @returns {String} - Age is returned 
+ */
 const getAge = (dateString)  => {
     let today = new Date();
     let birthDate = new Date(dateString);
