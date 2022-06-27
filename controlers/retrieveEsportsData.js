@@ -1,35 +1,26 @@
-/**
- * @file Controller file to retrieve data about esports
- */
-
 const path = require('path');
 const pandaScore = require(path.resolve( __dirname, './pandaScoreController.js'));
 
-/**
- * Check to see if the local storage already contains esports data to reduce API calls
- * @param {Array} theSportsDbData - data from the local storage
- * @returns {Array} - returns new api data and file prefixs of data gathered
- */
 const esportsCheck = (theSportsDbData) => {
     let esportsCallPromises = [];
+    // console.log(theSportsDbData[1].length)
     let esportsFiles = [];
     theSportsDbData[1].forEach(esportsData => {
+        // console.log(esportsData)
         let matches = [];
         esportsFiles.push(esportsData[1].fileprefix)
         esportsData[1].games.forEach(match => {
+        // console.log(esportsData)
+        // console.log(match)
         matches.push([match, esportsData[1]])
         esportsCallPromises.push(getAllEsportsData(match, esportsData[1]))
+
         });
+        
     });
     return [esportsCallPromises, esportsFiles];
 }
 
-/**
- * This tries to gather all of the esports data from external API but only if it is needed
- * @param {Object} finalJson - Object passed through the main server file which will write the new JSON file at the end
- * @param {Array} theSportsDbData - Data that needs to be checked from local storage
- * @returns {Promise} - Final promise of the data gathered from the api if needed
- */
 async function returnAllEsportsData(finalJson, theSportsDbData) {
     return new Promise((resolve, reject)=>{
         let checkData = esportsCheck(theSportsDbData);
@@ -37,6 +28,7 @@ async function returnAllEsportsData(finalJson, theSportsDbData) {
         let esportsFiles = checkData[1];
         Promise.all(esportsCallPromises)
         .then((esportsData)=>{
+            // console.log(esportsFiles)
             let newEsportsData = {...finalJson};
             
             let tempMatches = [];
@@ -69,6 +61,7 @@ async function returnAllEsportsData(finalJson, theSportsDbData) {
             console.log(tempMatches.length)
             tempMatchIndex = 0;
             tempIndex = 0;
+            // let matchesObj = newEsportsData;
             let tempTeams = [];
             tempTeamIndex = 0;
             teamsData.forEach((teamDataLocal, teamDataIndex) => {
@@ -91,30 +84,19 @@ async function returnAllEsportsData(finalJson, theSportsDbData) {
         })
   }
 
-/**
- * Retrieve data from a certain team
- * @param {String} teamID - ID of the team that needs data  
- * @returns {Promise} - Data returned for the API in JSON object format
- */
 async function getTeamData(teamId){
     return new Promise((resolve, reject)=>{
-        pandaScore.getTeamData(teamId, "ul5RBe3fXjrzQYaWwZFXg7hv_ACaKq1kTrK7hI7KlmLIm7KYTsc")
+        pandaScore.getTeamData(teamId, "token")
         .then((data)=>{
         resolve(data)
         })
     })
 }
 
-/**
- * Retrieve data from a certain team
- * @param {Array} games - Array containg the names of the two teams playing
- * @param {Object} newData - Object containing date   
- * @returns {Promise} - Data returned for the API in JSON object format
- */
 async function getAllEsportsData(games, newData){
     return new Promise((resolve, reject)=>{
       let range = newData.date + "T12:00:00Z," +  newData.date + "T22:00:00Z";
-      pandaScore.getGameData(range, games[0] + " vs " + games[1], 'ul5RBe3fXjrzQYaWwZFXg7hv_ACaKq1kTrK7hI7KlmLIm7KYTsc')
+      pandaScore.getGameData(range, games[0] + " vs " + games[1], 'token')
       .then((data)=>{
         resolve(data)
       })

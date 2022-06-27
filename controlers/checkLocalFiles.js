@@ -1,13 +1,5 @@
-/**
- * @file Controller file to check the nested local file directories.
- */
 const fs = require('fs');
 
-/**
- * Checks through the nested file directories to pull certain JSON files.
- * @param {Function} innerCallback - Return when it has been completed
- * @returns {void} - Nothing is returned from this method 
- */
 function getNestedFileData(innerCallback){
     let baseURL = 'public_html/assets/videos/';
     getDirectories("public_html/assets/videos/", (files)=>{
@@ -52,13 +44,6 @@ function getNestedFileData(innerCallback){
     }, true);
   }
 
-/**
- * Checks the folder child directories
- * @param {Function} source - Path of folder to look for child files
- * @param {Function} callback - Return all needed directories
- * @param {Boolean} directoriesNeeded - Boolean whether files need to be returned
- * @returns {void} - Nothing is returned from this method 
- */
   const getDirectories = (source, callback, directoryNeeded) => {
     fs.readdir(source, { withFileTypes: true }, (err, files) => {
       if (err) {

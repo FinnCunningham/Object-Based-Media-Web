@@ -1,15 +1,7 @@
-/**
- * @file Controller file to retrieve data about sports (Football)
- */
 const path = require('path');
 const theSportsDb = require(path.resolve( __dirname, './sportsDbController.js'));
 
-/**
- * Main function that tries to gather data from external APIs if it is needed 
- * @param {Array} allIdsPromise - Array of ids that have been gathered from external APIs
- * @param {Object} newData - Object passed through the main server file which will write the new JSON file at the end 
- * @returns {Promise} - returns newData
- */
+
 async function returnAllSportsDbData(allIdsPromise, newData){
     return new Promise((resolve, reject)=>{
   
@@ -38,7 +30,9 @@ async function returnAllSportsDbData(allIdsPromise, newData){
                   newData[sportsDBData.fileprefix]["teams"][1].forEach((player) => {
                     playersPromise.push(getPlayerDetailsLocal(player));
                   });
-                }else{}
+                }else{
+                  // Maybe set it to the file teams if needed?
+                }
                 
                 if(!newData[sportsDBData.fileprefix]["sport-info"]){
                   let sport = newData[sportsDBData.fileprefix].sport;
@@ -48,7 +42,9 @@ async function returnAllSportsDbData(allIdsPromise, newData){
                   sportsInfoPromise.push(getSportsDetailsLocal(sport));
                   sportsInfoFixprefixs.push(sportsDBData.fileprefix);
                 }
-              }else{}      
+              }else{
+                // getSportInfo
+              }      
           });
           Promise.all(playersPromise)
   
@@ -91,12 +87,6 @@ async function returnAllSportsDbData(allIdsPromise, newData){
     })
   }
 
-/**
- * Returns all team players details
- * @param {String} id - ID of game being shown
- * @param {String} fileprefix - fileprefix of game being shown 
- * @returns {promise} - Data returned for the API in JSON object format
- */
 async function getAllPlayersDataLocal(id, fileprefix){
     return new Promise((resolve, rejet)=>{
         theSportsDb.getPlayers(id, fileprefix).then((sportsDBData)=>{
@@ -105,11 +95,6 @@ async function getAllPlayersDataLocal(id, fileprefix){
     })
 }
 
-/**
- * Returns all Sports details
- * @param {String} sport - Name of sport
- * @returns {promise} - Data returned for the API in JSON object format
- */
 async function getSportsDetailsLocal(sport){
     return new Promise((resolve, reject) =>{
         theSportsDb.getSportInfo(sport).then((details)=>{  
@@ -117,11 +102,6 @@ async function getSportsDetailsLocal(sport){
     })})
 }
 
-/**
- * Returns certain player details
- * @param {Object} player - Containing name of player 
- * @returns {promise} - Data returned for the API in JSON object format
- */
 async function getPlayerDetailsLocal (player){
     return new Promise((resolve, reject) =>{theSportsDb.getPlayerDetails(encodeURI(player["name"])).then((details)=>{
       let tempPlayerArr = {
